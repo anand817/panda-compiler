@@ -1,0 +1,6 @@
+add_subdirectory(base)
+add_subdirectory(conditionals)
+add_subdirectory(context)
+add_subdirectory(expressions)
+add_subdirectory(functions)
+add_subdirectory(loop)
