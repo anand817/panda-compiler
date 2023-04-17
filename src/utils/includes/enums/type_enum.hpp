@@ -1,8 +1,5 @@
-enum TYPE
-{
-    DTYPE_INT,
-    DTYPE_CHAR,
-    DTYPE_STRING,
-    DTYPE_BOOL,
-    DTYPE_FLOAT,
-};
+const std::string INT = "int";
+const std::string FLOAT = "float";
+const std::string CHAR = "char";
+const std::string BOOL = "bool";
+// objects types are named after their class name

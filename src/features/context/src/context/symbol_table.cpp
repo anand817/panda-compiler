@@ -2,17 +2,32 @@
 
 // VariableInfo
 
-VariableInfo::VariableInfo(std::string dataType)
+VariableInfo::VariableInfo(std::string dataType, const allType &data) : value(data)
 {
     this->dataType = dataType;
 }
 
-VariableInfo::VariableInfo(VariableInfo &&other)
+VariableInfo::VariableInfo(std::string dataType, allType &&data) : value(std::move(data))
+{
+    this->dataType = dataType;
+}
+
+VariableInfo::VariableInfo(std::string dataType, const std::map<std::string, std::unique_ptr<SymbolInfo>> &properties) : value(properties)
+{
+    this->dataType = dataType;
+}
+
+VariableInfo::VariableInfo(std::string dataType, std::map<std::string, std::unique_ptr<SymbolInfo>> &&properties) : value(std::move(properties))
+{
+    this->dataType = dataType;
+}
+
+VariableInfo::VariableInfo(VariableInfo &&other) : value(std::move(other.value))
 {
     dataType = std::move(other.dataType);
 }
 
-VariableInfo::VariableInfo(const VariableInfo &other)
+VariableInfo::VariableInfo(const VariableInfo &other) : value(other.value)
 {
     dataType = other.dataType;
 }
@@ -22,6 +37,7 @@ VariableInfo &VariableInfo::operator=(VariableInfo &&other)
     if (this != &other)
     {
         dataType = std::move(other.dataType);
+        value = std::move(other.value);
     }
 
     return *this;
@@ -32,6 +48,7 @@ VariableInfo &VariableInfo::operator=(const VariableInfo &other)
     if (this != &other)
     {
         dataType = other.dataType;
+        value = other.value;
     }
 
     return *this;

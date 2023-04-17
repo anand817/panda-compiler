@@ -60,9 +60,9 @@ Context &Context::operator=(const Context &other)
     return *this;
 }
 
-void Context::addSymbol(std::string identifier, std::string dataType)
+void Context::addSymbol(std::string identifier, std::string dataType, allType &data)
 {
-    symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType));
+    symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
 }
 
 void Context::addSymbol(std::string identifier, std::string dataType, std::vector<std::string> &parameterList)

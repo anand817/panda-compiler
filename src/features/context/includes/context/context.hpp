@@ -26,7 +26,7 @@ public:
     Context &operator=(const Context &other);
 
     // public methods
-    void addSymbol(std::string identifier, std::string dataType);
+    void addSymbol(std::string identifier, std::string dataType, allType &data);
     void addSymbol(std::string identifier, std::string dataType, std::vector<std::string> &parameterList);
 
     friend class ContextHandler;
