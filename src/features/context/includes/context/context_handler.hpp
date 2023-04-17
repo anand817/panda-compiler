@@ -1,7 +1,7 @@
 #ifndef CONTEXT_HANDLER_H
 #define CONTEXT_HANDLER_H
 
-#include <context.hpp>
+#include <context/context.hpp>
 #include <stack>
 
 // singleton class that handles context in the programme

@@ -1,15 +1,15 @@
-#include <context.hpp>
-
-Context::Context(int id)
-{
-    this->id = id;
-    symbolTable.clear();
-}
+#include <context/context.hpp>
 
 Context::Context(int id, std::map<std::string, SymbolInfo> symbolTable)
 {
     this->id = id;
     this->symbolTable = symbolTable;
+}
+
+Context::Context(int id)
+{
+    this->id = id;
+    this->symbolTable.clear();
 }
 
 Context::Context(Context &&other)
@@ -37,11 +37,15 @@ Context &Context::operator=(Context &&other)
 
 Context &Context::operator=(const Context &other)
 {
-    id = other.id;
-    symbolTable = other.symbolTable;
+    if (this != &other)
+    {
+        id = other.id;
+        symbolTable = other.symbolTable;
+    }
+    return *this;
 }
 
 void Context::addSymbol(std::string identifier, std::string dataType)
 {
-    symbolTable[identifier] = SymbolInfo(dataType);
+    symbolTable.emplace(std::piecewise_construct, std::make_tuple(identifier), std::make_tuple(dataType));
 }

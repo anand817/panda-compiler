@@ -1,9 +1,10 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include <context_handler.hpp>
-#include <symbol_table.hpp>
+#include <context/symbol_table.hpp>
 #include <map>
+
+class ContextHandler; // forward declaration to remove circuilar dependency
 
 class Context
 {

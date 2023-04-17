@@ -12,9 +12,11 @@ public:
     // constructors
     SymbolInfo(std::string dataType);
     SymbolInfo(SymbolInfo &&other);
+    SymbolInfo(const SymbolInfo &other);
 
     // operator overloads
     SymbolInfo &operator=(SymbolInfo &&other);
+    SymbolInfo &operator=(const SymbolInfo &other);
 };
 
 #endif // SYMBOL_TABLE_H

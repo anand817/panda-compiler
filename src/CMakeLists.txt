@@ -1,3 +1,4 @@
 add_subdirectory(features)
 add_subdirectory(utils)
-add_subdirectory(rules)
+
+target_sources(panda-compiler PUBLIC panda-compiler.cpp)

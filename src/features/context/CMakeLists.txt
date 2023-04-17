@@ -1,6 +1,6 @@
 target_sources(panda-compiler PUBLIC
-    src/context/context_handler.cpp src
     src/context/context.cpp
+    src/context/context_handler.cpp
     src/context/symbol_table.cpp
 )
 
