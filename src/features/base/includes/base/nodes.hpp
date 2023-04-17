@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <enums/type_enum.hpp>
 
 class Node
 {

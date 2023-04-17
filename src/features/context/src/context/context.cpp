@@ -1,9 +1,18 @@
 #include <context/context.hpp>
 
-Context::Context(int id, std::map<std::string, SymbolInfo> symbolTable)
+Context::Context(int id, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable)
 {
     this->id = id;
-    this->symbolTable = symbolTable;
+    for (const auto &p : symbolTable)
+    {
+        this->symbolTable.emplace(p.first, p.second->clone());
+    }
+}
+
+Context::Context(int id, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable)
+{
+    this->id = id;
+    this->symbolTable = std::move(symbolTable);
 }
 
 Context::Context(int id)
@@ -21,7 +30,10 @@ Context::Context(Context &&other)
 Context::Context(const Context &other)
 {
     id = other.id;
-    symbolTable = other.symbolTable;
+    for (const auto &p : symbolTable)
+    {
+        this->symbolTable.emplace(p.first, p.second->clone());
+    }
 }
 
 Context &Context::operator=(Context &&other)
@@ -40,12 +52,22 @@ Context &Context::operator=(const Context &other)
     if (this != &other)
     {
         id = other.id;
-        symbolTable = other.symbolTable;
+        for (const auto &p : symbolTable)
+        {
+            this->symbolTable.emplace(p.first, p.second->clone());
+        }
     }
     return *this;
 }
 
 void Context::addSymbol(std::string identifier, std::string dataType)
 {
-    symbolTable.emplace(std::piecewise_construct, std::make_tuple(identifier), std::make_tuple(dataType));
+    symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType));
 }
+
+void Context::addSymbol(std::string identifier, std::string dataType, std::vector<std::string> &parameterList)
+{
+    symbolTable.emplace(identifier, std::make_unique<FunctionInfo>(dataType, parameterList));
+}
+
+// TODO: Find ways to piecewise emplace map with specified child class type
