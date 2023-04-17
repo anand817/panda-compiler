@@ -1,3 +1,6 @@
+#ifndef CLASS_INFO_H
+#define CLASS_INFO_H
+
 #include <map>
 #include <context/symbol_table.hpp>
 
@@ -17,3 +20,5 @@ public:
     ClassInfo &operator=(const ClassInfo &other);
     ClassInfo &operator=(ClassInfo &&other);
 };
+
+#endif // CLASS_INFO_H
