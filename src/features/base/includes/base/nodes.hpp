@@ -3,28 +3,53 @@
 
 #include <vector>
 #include <string>
-#include <enums/type_enum.hpp>
+#include <utils/nodes.hpp>
 
 class Node
 {
 public:
     virtual std::vector<std::string> generateCode() = 0;
+    virtual bool analyze() = 0;
     virtual void run() = 0;
 };
 
 class StatementNode : public Node
 {
+public:
+    virtual std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
 };
 
-class ProgrammeNode : public Node
+typedef std::vector<StatementNode *> StatementList;
+
+class BlockNode : public StatementNode
 {
-    std::vector<StatementNode *> statements;
+protected:
+    StatementList statements;
 
 public:
-    ProgrammeNode();
+    BlockNode();
+    BlockNode(const StatementList &statementList);
 
     virtual std::vector<std::string> generateCode();
+    virtual bool analyze();
     virtual void run();
+
+    virtual ~BlockNode();
+};
+
+// abstract class for declaration
+class DeclarationNode : public StatementNode
+{
+protected:
+    TypeNode *typeNode;
+    IdentifierNode *identifierNode;
+
+public:
+    DeclarationNode(TypeNode *const &type, IdentifierNode *const &identifier);
+
+    virtual ~DeclarationNode();
 };
 
 #endif // BASE_NODES_H

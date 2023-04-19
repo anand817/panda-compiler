@@ -1,56 +1,98 @@
-DIGIT [0-9]
-NUMBER {DIGIT}+
-FLOAT ({DIGIT}*\.{DIGIT}*)
-EXP ([eE][+-]?{NUMBER})
-REAL ({NUMBER}{EXP}|{FLOAT}{EXP})
-LETTER [a-zA-Z_]
-IDENTIFIER {LETTER}({LETTER}|{DIGIT})*
-LINE_COMMENT "//"(.)*
+%{
 
-%x MULTILINE_COMMENT
-%x STRING
+#include <vector>
+#include <string>
+#include <iostream>
+#include <parser.hpp>
 
-%%
-[\n\r\t ] ;
+using namespace std;
 
-"int" ECHO ;
-"char" ECHO ;
-"float" ECHO ;
-"string" ECHO ;
-"bool" ECHO ;
-"void" ECHO ;
-"auto" ECHO ;
+std::string literal;
 
-"if" ECHO ;
-"else" ECHO ;
+void saveValue();
+void saveLiteral();
 
-"while" ECHO ;
-"do" ECHO ;
+%}
 
-"for" ECHO ;
+%s BLOCK_COMMENT
+%s STRING_STATE
 
-"continue" ECHO ;
-"break" ECHO ;
-"return" ECHO ;
 
-{LINE_COMMENT} ;
-{NUMBER} ECHO ;
-{FLOAT} ECHO ;
-{REAL} ECHO ;
-{IDENTIFIER} ECHO ;
 
-\" BEGIN STRING;
-<STRING>\" BEGIN INITIAL;
-<STRING>. ECHO ;
-
-"/*" BEGIN MULTILINE_COMMENT;
-<MULTILINE_COMMENT>"*/" BEGIN INITIAL;
-<MULTILINE_COMMENT>(.|\n) ;
-
-. ECHO ;
+DIGIT               [0-9]
+INTEGER             [0-9]+
+FLOAT               (([0-9]*\.[0-9]+)|([0-9]+\.[0-9]*))
+EXP                 ([eE][-+]?{INTEGER})
+REAL                ({INTEGER}{EXP}|{FLOAT}{EXP}?)
+LETTER              [a-zA-Z_]
+IDENTIFIER          {LETTER}({LETTER}|{DIGIT})*
+LINE_COMMENT        "//"(.)*
 
 %%
 
-int yywrap(){
+<INITIAL>\n                                  ;
+<INITIAL>\r                                  ;
+<INITIAL>\t                                  ;
+<INITIAL>" "                                 ;
+
+<INITIAL>"int"                      return TYPE_INT;
+<INITIAL>"float"                    return TYPE_FLOAT;
+<INITIAL>"char"                     return TYPE_CHAR;
+<INITIAL>"bool"                     return TYPE_BOOL;
+<INITIAL>"void"                     return TYPE_VOID;
+<INITIAL>"string"                   return TYPE_STRING;
+
+<INITIAL>"if"                       return IF;
+<INITIAL>"else"                     return ELSE;
+<INITIAL>"for"                      return FOR;
+<INITIAL>"while"                    return WHILE;
+<INITIAL>"break"                    return BREAK;
+<INITIAL>"continue"                 return CONTINUE;
+<INITIAL>"return"                   return RETURN;
+
+<INITIAL>"++"                       return INC;
+<INITIAL>"--"                       return DEC;
+<INITIAL>"=="                       return EQUAL;
+<INITIAL>"!="                       return NOT_EQUAL;
+<INITIAL>">="                       return GREATER_EQUAL;
+<INITIAL>"<="                       return LESS_EQUAL;
+<INITIAL>"&&"                       return LOGICAL_AND;
+<INITIAL>"||"                       return LOGICAL_OR;
+<INITIAL>[-+*/%&|^~!<>=(){}[\],:;]  return yytext[0];
+
+
+<INITIAL>{INTEGER}                  saveValue(); return INTEGER;
+<INITIAL>{REAL}                     saveValue(); return FLOAT;
+<INITIAL>(\'.\')                    saveValue(); return CHAR;
+<INITIAL>"true"                     saveValue(); return BOOL;
+<INITIAL>"false"                    saveValue(); return BOOL;
+<INITIAL>{IDENTIFIER}               saveValue(); return IDENTIFIER;
+
+<INITIAL>{LINE_COMMENT}             ;// Ignore comments
+<INITIAL>"/*"                       BEGIN BLOCK_COMMENT;
+<BLOCK_COMMENT>"*/"                 BEGIN INITIAL;
+<BLOCK_COMMENT>.                    ;// Ignore block comments
+
+<INITIAL>"\""                       BEGIN STRING_STATE; literal = "";
+<STRING_STATE>"\\n"                 literal += "\n";
+<STRING_STATE>"\\t"                 literal += "\t";
+<STRING_STATE>"\\\""                literal += "\"";
+<STRING_STATE>"\""                  BEGIN INITIAL; saveLiteral(); return STRING;
+<STRING_STATE>"\n"                  cout << "invalid string"; exit(1);
+<STRING_STATE>.                     literal += *yytext;
+
+<INITIAL>.                          return yytext[0];
+
+%%
+
+void saveValue(){
+    yylval.valueNode->value = strdup(yytext);
+}
+
+void saveLiteral(){
+    yylval.valueNode->value = literal;
+}
+
+int yywrap() {
     return 1;
 }

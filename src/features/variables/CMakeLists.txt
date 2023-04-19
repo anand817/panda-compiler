@@ -1,6 +1,6 @@
 target_sources(panda-compiler PRIVATE
-    src/base/statement_node.cpp
-    src/base/block_node.cpp
+    src/variables/variable_declaration_node.cpp
+    src/variables/variable_definition_node.cpp
 )
 
 target_include_directories(panda-compiler PRIVATE includes/)
