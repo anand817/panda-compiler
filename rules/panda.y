@@ -2,6 +2,7 @@
     #include <iostream>
     #include <string>
     #include <base/nodes.hpp>
+    #include <variables/nodes.hpp>
     #include <utils/nodes.hpp>
     using namespace std;
 }
@@ -18,59 +19,67 @@
 // Symbol Types
 
 %union {
+    TokenNode                       token; // not a pointer
     BlockNode*                      blockNode;
-    TokenNode*                      tokenNode;
     ValueNode*                      valueNode;
+    IdentifierNode*                 identifierNode;
     TypeNode*                       typeNode;
     StatementList*                  statementList;
     StatementNode*                  statementNode;
+    VariableDeclarationNode*        variableDeclarationNode;
+    VariableDefinitionNode*         variableDefinitionNode;
 }
 
 // Tokens Definition
 
 // Data types
-%token <typeNode> TYPE_INT
-%token <typeNode> TYPE_FLOAT
-%token <typeNode> TYPE_CHAR
-%token <typeNode> TYPE_BOOL
-%token <typeNode> TYPE_VOID
-%token <typeNode> TYPE_STRING
+%token <token> TYPE_INT
+%token <token> TYPE_FLOAT
+%token <token> TYPE_CHAR
+%token <token> TYPE_BOOL
+%token <token> TYPE_VOID
+%token <token> TYPE_STRING
 
 // Keywords
-%token <tokenNode> CONST
-%token <tokenNode> IF
-%token <tokenNode> ELSE
-%token <tokenNode> FOR
-%token <tokenNode> WHILE
-%token <tokenNode> BREAK
-%token <tokenNode> CONTINUE
-%token <tokenNode> RETURN
+%token <token> CONST
+%token <token> IF
+%token <token> ELSE
+%token <token> FOR
+%token <token> WHILE
+%token <token> BREAK
+%token <token> CONTINUE
+%token <token> RETURN
 
 // Operators
-%token <tokenNode> INC
-%token <tokenNode> DEC
-%token <tokenNode> LOGICAL_AND
-%token <tokenNode> LOGICAL_OR
-%token <tokenNode> EQUAL
-%token <tokenNode> NOT_EQUAL
-%token <tokenNode> GREATER_EQUAL
-%token <tokenNode> LESS_EQUAL
+%token <token> INC
+%token <token> DEC
+%token <token> LOGICAL_AND
+%token <token> LOGICAL_OR
+%token <token> EQUAL
+%token <token> NOT_EQUAL
+%token <token> GREATER_EQUAL
+%token <token> LESS_EQUAL
 
 // Values
-%token <valueNode> INTEGER
-%token <valueNode> FLOAT
-%token <valueNode> CHAR
-%token <valueNode> BOOL
-%token <valueNode> IDENTIFIER
-%token <valueNode> STRING
+%token <token> INTEGER
+%token <token> FLOAT
+%token <token> CHAR
+%token <token> BOOL
+%token <token> STRING
+%token <token> IDENTIFIER
 
 // Non-terminal Symbols Types
 
-%type <statementList>        program
-%type <statementList>        statement_list
-%type <statementNode>        statement
-%type <blockNode>            statement_block
-%type <tokenNode>            '-' '+' '*' '/' '%' '&' '|' '^' '~' '!' '<' '>' '=' '(' ')' '{' '}' '[' ']' ',' ':' ';'
+%type <statementList>           program
+%type <statementList>           statement_list
+%type <statementNode>           statement
+%type <blockNode>               statement_block
+%type <variableDeclarationNode> variable_declaration
+%type <variableDefinitionNode>  variable_definition
+%type <typeNode>                type
+%type <identifierNode>          identifier
+%type <typeNode>                
+%type <token>            '-' '+' '*' '/' '%' '&' '|' '^' '~' '!' '<' '>' '=' '(' ')' '{' '}' '[' ']' ',' ':' ';'
 
 
 // associativity
@@ -98,21 +107,27 @@
 
 // Rules Section
 
-program:            /* epsilon */                       { programmeRoot = new StatementList(); $$ = nullptr; }
-       |            statement_list                      { programmeRoot = $1; $$ = nullptr; }
+program:                /* epsilon */                       { programmeRoot = new StatementList(); $$ = nullptr; }
+       |                statement_list                      { programmeRoot = $1; $$ = nullptr; }
        ;
 
 
-statement_list:     statement                           { $$ = new StatementList(); $$->push_back($1); }
-              |     statement_list statement            { $$ = $1; $$->push_back($2); }
-              |     statement_block                     { $$ = new StatementList(); $$->push_back($1); }
-              |     statement_list statement_block      { $$ = $1; $$->push_back($2); }
+statement_list:         statement                           { $$ = new StatementList(); $$->push_back($1); }
+              |         statement_list statement            { $$ = $1; $$->push_back($2); }
+              |         statement_block                     { $$ = new StatementList(); $$->push_back($1); }
+              |         statement_list statement_block      { $$ = $1; $$->push_back($2); }
               ;
 
-statement_block:    '{' '}'                             { $$ = new BlockNode(); }
-               |    '{' statement_list '}'              { $$ = new BlockNode(*$2); delete $2; }
+statement_block:        '{' '}'                             { $$ = new BlockNode(); }
+               |        '{' statement_list '}'              { $$ = new BlockNode(*$2); delete $2; }
 
-statement:          ';'                                 { $$ = new StatementNode(); }
+statement:              ';'                                 { $$ = new StatementNode(); }
+         |              variable_declaration                { $$ = $1 }
+         |              variable_definition                 { $$ = $1 }
+
+variable_declaration:   type identifier ';'                 { $$ = new VariableDeclarationNode(*$1, *$2); delete $1; delete $2; }
+
+variable_definition:    type identifier '=' 
 
 
 %%

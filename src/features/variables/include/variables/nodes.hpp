@@ -4,7 +4,7 @@
 class VariableDeclarationNode : public DeclarationNode
 {
 public:
-    VariableDeclarationNode(TypeNode *const &type, IdentifierNode *const &identifier);
+    VariableDeclarationNode(const TypeNode &type, const IdentifierNode &identifier);
 
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
@@ -14,7 +14,7 @@ public:
 class VariableDefinitionNode : public VariableDeclarationNode
 {
 public:
-    VariableDefinitionNode(TypeNode *const &type, IdentifierNode *const &identifier);
+    VariableDefinitionNode(const TypeNode &type, const IdentifierNode &identifier);
 
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();

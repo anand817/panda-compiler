@@ -1,15 +1,9 @@
 #include <variables/nodes.hpp>
 
-VariableDeclarationNode::VariableDeclarationNode(TypeNode *const &type, IdentifierNode *const &identifier) : DeclarationNode(type, identifier) {}
+VariableDeclarationNode::VariableDeclarationNode(const TypeNode &type, const IdentifierNode &identifier) : DeclarationNode(type, identifier) {}
 
-std::vector<std::string> VariableDeclarationNode::generateCode()
-{
-}
+std::vector<std::string> VariableDeclarationNode::generateCode() {}
 
-bool VariableDeclarationNode::analyze()
-{
-}
+bool VariableDeclarationNode::analyze() {}
 
-void VariableDeclarationNode::run()
-{
-}
+void VariableDeclarationNode::run() {}

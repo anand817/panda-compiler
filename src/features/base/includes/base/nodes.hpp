@@ -22,6 +22,7 @@ public:
 };
 
 typedef std::vector<StatementNode *> StatementList;
+// pointers required to support runtime polymorphism
 
 class BlockNode : public StatementNode
 {
@@ -43,13 +44,11 @@ public:
 class DeclarationNode : public StatementNode
 {
 protected:
-    TypeNode *typeNode;
-    IdentifierNode *identifierNode;
+    TypeNode typeNode;
+    IdentifierNode identifierNode;
 
 public:
-    DeclarationNode(TypeNode *const &type, IdentifierNode *const &identifier);
-
-    virtual ~DeclarationNode();
+    DeclarationNode(const TypeNode &type, const IdentifierNode &identifier);
 };
 
 #endif // BASE_NODES_H

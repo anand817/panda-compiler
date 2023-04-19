@@ -9,7 +9,7 @@ using namespace std;
 
 std::string literal;
 
-void saveValue();
+void saveToken();
 void saveLiteral();
 
 %}
@@ -61,12 +61,12 @@ LINE_COMMENT        "//"(.)*
 <INITIAL>[-+*/%&|^~!<>=(){}[\],:;]  return yytext[0];
 
 
-<INITIAL>{INTEGER}                  saveValue(); return INTEGER;
-<INITIAL>{REAL}                     saveValue(); return FLOAT;
-<INITIAL>(\'.\')                    saveValue(); return CHAR;
-<INITIAL>"true"                     saveValue(); return BOOL;
-<INITIAL>"false"                    saveValue(); return BOOL;
-<INITIAL>{IDENTIFIER}               saveValue(); return IDENTIFIER;
+<INITIAL>{INTEGER}                  saveToken(); return INTEGER;
+<INITIAL>{REAL}                     saveToken(); return FLOAT;
+<INITIAL>(\'.\')                    saveToken(); return CHAR;
+<INITIAL>"true"                     saveToken(); return BOOL;
+<INITIAL>"false"                    saveToken(); return BOOL;
+<INITIAL>{IDENTIFIER}               saveToken(); return IDENTIFIER;
 
 <INITIAL>{LINE_COMMENT}             ;// Ignore comments
 <INITIAL>"/*"                       BEGIN BLOCK_COMMENT;
@@ -85,12 +85,12 @@ LINE_COMMENT        "//"(.)*
 
 %%
 
-void saveValue(){
-    yylval.valueNode->value = strdup(yytext);
+void saveToken(){
+    yylval.token.value = strdup(yytext);
 }
 
 void saveLiteral(){
-    yylval.valueNode->value = literal;
+    yylval.token.value = literal;
 }
 
 int yywrap() {
