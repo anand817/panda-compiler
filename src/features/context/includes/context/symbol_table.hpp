@@ -5,16 +5,17 @@
 #include <vector>
 #include <memory>
 #include <context/object.hpp>
+#include <context/class_table.hpp>
 
 // abstrcat class
 class SymbolInfo
 {
-protected:
-    std::string dataType;
+public:
+    typeInfo dataType;
 
 public:
-    SymbolInfo(const std::string &dataType);
-    SymbolInfo(std::string &&dataType);
+    SymbolInfo(const typeInfo &dataType);
+    SymbolInfo(typeInfo &&dataType);
 
     virtual std::string getType() = 0;
     virtual std::unique_ptr<SymbolInfo> clone() = 0;
@@ -23,12 +24,12 @@ public:
 // implementations
 class VariableInfo : public SymbolInfo
 {
-protected:
+public:
     valueType valueContainer;
 
 public:
-    VariableInfo(const std::string &dataType, const valueType &data);
-    VariableInfo(const std::string &dataType, valueType &&data);
+    VariableInfo(const typeInfo &dataType, const valueType &data);
+    VariableInfo(typeInfo &&dataType, valueType &&data);
 
     VariableInfo(VariableInfo &&other);
     VariableInfo(const VariableInfo &other);
@@ -43,11 +44,11 @@ public:
 
 class FunctionInfo : public SymbolInfo
 {
-protected:
+public:
     std::vector<std::string> parameters;
 
 public:
-    FunctionInfo(std::string dataType, std::vector<std::string> parameterList);
+    FunctionInfo(const typeInfo &dataType, std::vector<std::string> parameterList);
     FunctionInfo(FunctionInfo &&other);
     FunctionInfo(const FunctionInfo &other);
 

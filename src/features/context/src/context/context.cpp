@@ -1,4 +1,5 @@
 #include <context/context.hpp>
+#include <iostream>
 
 Context::Context(int id, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable)
 {
@@ -30,7 +31,7 @@ Context::Context(Context &&other)
 Context::Context(const Context &other)
 {
     id = other.id;
-    for (const auto &p : symbolTable)
+    for (const auto &p : other.symbolTable)
     {
         this->symbolTable.emplace(p.first, p.second->clone());
     }
@@ -60,12 +61,43 @@ Context &Context::operator=(const Context &other)
     return *this;
 }
 
-void Context::addSymbol(const std::string &identifier, const std::string &dataType, const valueType &data)
+void Context::addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
 {
-    symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
+    if (symbolTable.find(identifier) == symbolTable.end())
+    {
+        symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
+    }
+    else
+    {
+        throw "variable already decleared, multiple definitions not allowed";
+    }
 }
 
-void Context::addSymbol(const std::string &identifier, const std::string &dataType, const std::vector<std::string> &parameterList)
+void Context::updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
+{
+    if (symbolTable.find(identifier) == symbolTable.end())
+    {
+        symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
+    }
+    else
+    {
+        std::unique_ptr<SymbolInfo> &symbolInfo = symbolTable[identifier];
+        if (getTypeString(symbolInfo->dataType) != getTypeString(dataType))
+        {
+            throw "unmatching type";
+        }
+
+        VariableInfo *variableInfo = dynamic_cast<VariableInfo *>(symbolInfo.get());
+        if (variableInfo)
+        {
+            throw "not a variable";
+        }
+
+        variableInfo->valueContainer = data;
+    }
+}
+
+void Context::addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::string> &parameterList)
 {
     symbolTable.emplace(identifier, std::make_unique<FunctionInfo>(dataType, parameterList));
 }
@@ -78,6 +110,17 @@ void Context::addClass(const std::string &name, const classTypeInfo &info)
 void Context::addClass(const std::string &name, classTypeInfo &&info)
 {
     classTable.emplace(name, std::make_unique<ClassInfo>(std::move(info)));
+}
+
+void Context::print() const
+{
+    std::cout << "----------- " << id << " -----------" << std::endl;
+
+    for (auto &symbols : symbolTable)
+    {
+        std::cout << symbols.first << ":" << symbols.second->getType() << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 // TODO: Find ways to piecewise emplace map with specified child class type

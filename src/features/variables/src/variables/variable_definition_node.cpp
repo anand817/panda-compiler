@@ -12,7 +12,14 @@ bool VariableDefinitionNode::analyze()
     return true;
 }
 
-void VariableDefinitionNode::run() {}
+void VariableDefinitionNode::run()
+{
+    if (getTypeString(typeNode.type) != expressionNode->valueNode.type)
+    {
+        throw "mismatched types";
+    }
+    ContextHandler::addSymbol(identifierNode.name, typeNode.type, expressionNode->valueNode.value);
+}
 
 void VariableDefinitionNode::print(std::string prefix)
 {

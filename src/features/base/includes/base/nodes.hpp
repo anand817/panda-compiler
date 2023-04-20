@@ -5,6 +5,7 @@
 #include <string>
 #include <utils/nodes.hpp>
 #include <iostream>
+#include <context/context_handler.hpp>
 
 class Node
 {

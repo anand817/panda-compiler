@@ -12,7 +12,10 @@ bool VariableDeclarationNode::analyze()
     return true;
 }
 
-void VariableDeclarationNode::run() {}
+void VariableDeclarationNode::run()
+{
+    ContextHandler::addSymbol(identifierNode.name, typeNode.type, getDefaultValue(getTypeString(typeNode.type)));
+}
 
 void VariableDeclarationNode::print(std::string prefix)
 {

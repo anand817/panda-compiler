@@ -2,7 +2,7 @@
 #define CLASS_INFO_H
 
 #include <map>
-#include <context/symbol_table.hpp>
+#include <variant>
 
 struct classTypeInfo;
 

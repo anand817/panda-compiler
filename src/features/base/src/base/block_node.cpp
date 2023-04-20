@@ -31,10 +31,12 @@ bool BlockNode::analyze()
 
 void BlockNode::run()
 {
+    ContextHandler::pushContext();
     for (StatementNode *statement : statements)
     {
         statement->run();
     }
+    ContextHandler::popContext();
 }
 
 void BlockNode::print(std::string prefix)

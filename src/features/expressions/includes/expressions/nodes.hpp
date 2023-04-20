@@ -6,7 +6,7 @@
 
 class ExpressionNode : public StatementNode
 {
-protected:
+public:
     ValueNode valueNode;
 
 public:

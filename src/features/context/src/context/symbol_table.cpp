@@ -1,14 +1,15 @@
 #include <context/symbol_table.hpp>
+#include <context/object.hpp>
 
 // SymbolInfo
 
-SymbolInfo::SymbolInfo(const std::string &dataType) : dataType(dataType) {}
-SymbolInfo::SymbolInfo(std::string &&dataType) : dataType(std::move(dataType)) {}
+SymbolInfo::SymbolInfo(const typeInfo &dataType) : dataType(dataType) {}
+SymbolInfo::SymbolInfo(typeInfo &&dataType) : dataType(std::move(dataType)) {}
 
 // VariableInfo
 
-VariableInfo::VariableInfo(const std::string &dataType, const valueType &data) : SymbolInfo(dataType), valueContainer(data) {}
-VariableInfo::VariableInfo(const std::string &dataType, valueType &&data) : SymbolInfo(dataType), valueContainer(std::move(data)) {}
+VariableInfo::VariableInfo(const typeInfo &dataType, const valueType &data) : SymbolInfo(dataType), valueContainer(data) {}
+VariableInfo::VariableInfo(typeInfo &&dataType, valueType &&data) : SymbolInfo(dataType), valueContainer(std::move(data)) {}
 
 VariableInfo::VariableInfo(VariableInfo &&other) : SymbolInfo(std::move(other.dataType)), valueContainer(std::move(other.valueContainer)) {}
 VariableInfo::VariableInfo(const VariableInfo &other) : SymbolInfo(other.dataType), valueContainer(other.valueContainer) {}
@@ -37,7 +38,7 @@ VariableInfo &VariableInfo::operator=(const VariableInfo &other)
 
 std::string VariableInfo::getType()
 {
-    return dataType;
+    return getTypeString(dataType);
 }
 
 std::unique_ptr<SymbolInfo> VariableInfo::clone()
@@ -47,7 +48,7 @@ std::unique_ptr<SymbolInfo> VariableInfo::clone()
 
 // FunctionInfo
 
-FunctionInfo::FunctionInfo(std::string dataType, std::vector<std::string> parameterList) : SymbolInfo(dataType), parameters(parameterList) {}
+FunctionInfo::FunctionInfo(const typeInfo &dataType, std::vector<std::string> parameterList) : SymbolInfo(dataType), parameters(parameterList) {}
 
 FunctionInfo::FunctionInfo(FunctionInfo &&other) : SymbolInfo(std::move(other.dataType)), parameters(std::move(other.parameters)) {}
 
@@ -77,7 +78,12 @@ FunctionInfo &FunctionInfo::operator=(const FunctionInfo &other)
 
 std::string FunctionInfo::getType()
 {
-    return dataType;
+    if (std::holds_alternative<std::string>(dataType))
+    {
+        return std::get<std::string>(dataType);
+    }
+
+    return std::get<classTypeInfo>(dataType).className;
 }
 
 std::unique_ptr<SymbolInfo> FunctionInfo::clone()

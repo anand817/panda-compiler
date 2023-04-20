@@ -86,6 +86,28 @@ int main(int argc, char *argv[])
         {
             statement->print("");
         }
+
+        try
+        {
+            ContextHandler::pushContext();
+            for (auto statement : *programmeRoot)
+            {
+                statement->run();
+            }
+            ContextHandler::popContext();
+        }
+        catch (const char *e)
+        {
+            std::cout << "Error: " << e << std::endl;
+        }
+        catch (std::string e)
+        {
+            std::cout << "Error: " << e << std::endl;
+        }
+
+        std::cout << "\n\n------------ Symbol table -----------------\n\n";
+
+        ContextHandler::printTable();
     }
 
     fclose(yyin);
