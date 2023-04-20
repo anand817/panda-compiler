@@ -22,6 +22,7 @@ public:
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
     virtual void run();
+    virtual void print(std::string prefix);
 };
 
 #endif // EXPRESSION_NODES_H

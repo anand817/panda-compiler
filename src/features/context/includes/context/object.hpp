@@ -14,4 +14,6 @@ struct objectType
     std::map<std::string, valueType> object;
 };
 
+bool matchType(const valueType &value, const std::string &type);
+
 #endif // OBJECT_H

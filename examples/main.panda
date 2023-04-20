@@ -1,0 +1,12 @@
+int a = 3;
+char b = 'a';
+string c = "abcd";
+bool d = true;
+float f = 2.31;
+int p;
+char q;
+{
+    int r = 2;
+    int s = 3;
+    char t;
+}

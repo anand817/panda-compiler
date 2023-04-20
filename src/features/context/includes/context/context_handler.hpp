@@ -7,7 +7,7 @@
 // singleton class that handles context in the programme
 class ContextHandler
 {
-    std::stack<Context> contextStack;
+    std::vector<Context> contextStack;
     int contextCounter;
 
 private:
@@ -19,8 +19,8 @@ public:
     ContextHandler &getInstance();
 
 public:
-    void addContext();
-    void removeContext();
+    void pushContext();
+    void popContext();
     Context &getContext();
 };
 

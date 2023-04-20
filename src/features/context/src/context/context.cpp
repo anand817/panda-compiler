@@ -70,12 +70,12 @@ void Context::addSymbol(const std::string &identifier, const std::string &dataTy
     symbolTable.emplace(identifier, std::make_unique<FunctionInfo>(dataType, parameterList));
 }
 
-void Context::addClass(const std::string &name, const propertyInfo &info)
+void Context::addClass(const std::string &name, const classTypeInfo &info)
 {
     classTable.emplace(name, std::make_unique<ClassInfo>(info));
 }
 
-void Context::addClass(const std::string &name, propertyInfo &&info)
+void Context::addClass(const std::string &name, classTypeInfo &&info)
 {
     classTable.emplace(name, std::make_unique<ClassInfo>(std::move(info)));
 }

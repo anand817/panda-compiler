@@ -4,18 +4,27 @@
 #include <map>
 #include <context/symbol_table.hpp>
 
-typedef std::map<std::string, std::string> propertyInfo;
+struct classTypeInfo;
+
+typedef std::variant<std::string, classTypeInfo> typeInfo;
+
+struct classTypeInfo
+{
+    std::string className;
+    std::map<std::string, typeInfo> propertyInfo;
+};
+
 class ClassInfo
 {
 public:
-    propertyInfo info;
+    classTypeInfo info;
 
-    ClassInfo(const propertyInfo &info);
-    ClassInfo(propertyInfo &&info);
+    ClassInfo(const classTypeInfo &info);
+    ClassInfo(classTypeInfo &&info);
     ClassInfo(const ClassInfo &other);
     ClassInfo(ClassInfo &&other);
 
-    void addProperty(const std::string &name, const std::string &type);
+    void addProperty(const std::string &name, const typeInfo &type);
 
     ClassInfo &operator=(const ClassInfo &other);
     ClassInfo &operator=(ClassInfo &&other);

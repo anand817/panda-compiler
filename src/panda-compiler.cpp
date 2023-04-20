@@ -3,7 +3,7 @@
 
 extern int yyparse();
 extern FILE *yyin;
-extern StatementNode *programmeRoot;
+extern StatementList *programmeRoot;
 
 std::string inputFilename, outputFileName, symbolTableFileName;
 
@@ -61,10 +61,6 @@ void parseArguments(int argc, char *argv[])
     }
 }
 
-void writeToFile()
-{
-}
-
 int main(int argc, char *argv[])
 {
     parseArguments(argc, argv);
@@ -84,7 +80,13 @@ int main(int argc, char *argv[])
 
     yyparse();
 
-    // analyze, run and generate pandaCode
+    if (programmeRoot)
+    {
+        for (auto statement : *programmeRoot)
+        {
+            statement->print("");
+        }
+    }
 
     fclose(yyin);
 

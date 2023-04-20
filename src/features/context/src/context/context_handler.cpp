@@ -1,13 +1,6 @@
 #include <context/context_handler.hpp>
 
-ContextHandler::ContextHandler()
-{
-    contextCounter = 0;
-    while (!contextStack.empty())
-    {
-        contextStack.pop();
-    }
-}
+ContextHandler::ContextHandler() : contextCounter(0), contextStack({}) {}
 
 ContextHandler &ContextHandler::getInstance()
 {
@@ -15,29 +8,18 @@ ContextHandler &ContextHandler::getInstance()
     return instance;
 }
 
-void ContextHandler::addContext()
+void ContextHandler::pushContext()
 {
-    if (contextCounter > 0)
-    {
-        // if there is a previous context variable then
-        // append their symbol into new one
-        Context &previousContext = this->getContext();
-        contextStack.emplace(contextCounter, previousContext.symbolTable);
-    }
-    else
-    {
-        // when no previous context then add a empty symbol table
-        contextStack.emplace(contextCounter);
-    }
+    contextStack.emplace_back(contextCounter);
     contextCounter += 1;
 }
 
-void ContextHandler::removeContext()
+void ContextHandler::popContext()
 {
-    contextStack.pop();
+    contextStack.pop_back();
 }
 
 Context &ContextHandler::getContext()
 {
-    return contextStack.top();
+    return contextStack.back();
 }

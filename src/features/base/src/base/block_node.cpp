@@ -37,6 +37,16 @@ void BlockNode::run()
     }
 }
 
+void BlockNode::print(std::string prefix)
+{
+    std::cout << prefix << "Block Node with " << statements.size() << " statements" << std::endl;
+    prefix += "\t-> ";
+    for (auto statement : statements)
+    {
+        statement->print(prefix);
+    }
+}
+
 BlockNode::~BlockNode()
 {
     for (StatementNode *statement : statements)

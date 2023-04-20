@@ -31,8 +31,8 @@ public:
     void addSymbol(const std::string &identifier, const std::string &dataType, const valueType &data);
     void addSymbol(const std::string &identifier, const std::string &dataType, const std::vector<std::string> &parameterList);
 
-    void addClass(const std::string &name, const propertyInfo &info);
-    void addClass(const std::string &name, propertyInfo &&info);
+    void addClass(const std::string &name, const classTypeInfo &info);
+    void addClass(const std::string &name, classTypeInfo &&info);
 
     friend class ContextHandler;
 };

@@ -13,6 +13,7 @@ public:
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
     virtual void run();
+    virtual void print(std::string prefix);
 };
 
 class VariableDefinitionNode : public VariableDeclarationNode
@@ -26,6 +27,7 @@ public:
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
     virtual void run();
+    virtual void print(std::string prefix);
 
     ~VariableDefinitionNode();
 };

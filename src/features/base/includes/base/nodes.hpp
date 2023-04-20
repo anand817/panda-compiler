@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <utils/nodes.hpp>
+#include <iostream>
 
 class Node
 {
@@ -11,6 +12,7 @@ public:
     virtual std::vector<std::string> generateCode() = 0;
     virtual bool analyze() = 0;
     virtual void run() = 0;
+    virtual void print(std::string prefix) = 0;
 };
 
 class StatementNode : public Node
@@ -19,6 +21,7 @@ public:
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
     virtual void run();
+    virtual void print(std::string prefix);
 };
 
 typedef std::vector<StatementNode *> StatementList;
@@ -36,6 +39,7 @@ public:
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
     virtual void run();
+    virtual void print(std::string prefix);
 
     virtual ~BlockNode();
 };

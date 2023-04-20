@@ -3,6 +3,8 @@
 
 #include <string>
 #include <context/object.hpp>
+#include <context/class_table.hpp>
+#include <iostream>
 #include <enums/type_enum.hpp>
 #include <cstring>
 
@@ -13,9 +15,11 @@
 class TypeNode
 {
 public:
-    std::string type;
+    typeInfo type;
 
-    TypeNode(const std::string &type);
+    TypeNode(const typeInfo &type);
+    TypeNode(typeInfo &&type);
+    void print(std::string prefix);
 };
 
 // for operators
@@ -32,6 +36,7 @@ public:
     std::string name;
 
     IdentifierNode(const std::string &name);
+    void print(std::string prefix);
 };
 
 // for rvalue
@@ -44,6 +49,7 @@ public:
 
     ValueNode(const std::string &type, const valueType &value);
     ValueNode(const std::string &type, const char *raw_value);
+    void print(std::string prefix);
 };
 
 #endif // UTILS_NODES_H

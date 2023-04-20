@@ -37,3 +37,10 @@ bool ExpressionNode::analyze()
 }
 
 void ExpressionNode::run() {}
+
+void ExpressionNode::print(std::string prefix)
+{
+    std::cout << prefix << "single valued Expression Node" << std::endl;
+    prefix += "\t-> ";
+    valueNode.print(prefix);
+}

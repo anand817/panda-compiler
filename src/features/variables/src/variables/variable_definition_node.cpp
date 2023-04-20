@@ -14,6 +14,15 @@ bool VariableDefinitionNode::analyze()
 
 void VariableDefinitionNode::run() {}
 
+void VariableDefinitionNode::print(std::string prefix)
+{
+    std::cout << prefix << "Variable Definition Node" << std::endl;
+    prefix += "\t-> ";
+    typeNode.print(prefix);
+    identifierNode.print(prefix);
+    expressionNode->print(prefix);
+}
+
 VariableDefinitionNode::~VariableDefinitionNode()
 {
     if (expressionNode)
