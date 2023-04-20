@@ -13,6 +13,9 @@ protected:
     std::string dataType;
 
 public:
+    SymbolInfo(const std::string &dataType);
+    SymbolInfo(std::string &&dataType);
+
     virtual std::string getType() = 0;
     virtual std::unique_ptr<SymbolInfo> clone() = 0;
 };
@@ -21,13 +24,12 @@ public:
 class VariableInfo : public SymbolInfo
 {
 protected:
-    Object value;
+    valueType valueContainer;
 
 public:
-    VariableInfo(std::string dataType, const allType &data);
-    VariableInfo(std::string dataType, allType &&data);
-    VariableInfo(std::string dataType, const std::map<std::string, std::unique_ptr<SymbolInfo>> &properties);
-    VariableInfo(std::string dataType, std::map<std::string, std::unique_ptr<SymbolInfo>> &&properties);
+    VariableInfo(const std::string &dataType, const valueType &data);
+    VariableInfo(const std::string &dataType, valueType &&data);
+
     VariableInfo(VariableInfo &&other);
     VariableInfo(const VariableInfo &other);
 

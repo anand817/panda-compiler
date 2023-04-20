@@ -60,7 +60,7 @@ Context &Context::operator=(const Context &other)
     return *this;
 }
 
-void Context::addSymbol(const std::string &identifier, const std::string &dataType, const allType &data)
+void Context::addSymbol(const std::string &identifier, const std::string &dataType, const valueType &data)
 {
     symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
 }
@@ -70,12 +70,12 @@ void Context::addSymbol(const std::string &identifier, const std::string &dataTy
     symbolTable.emplace(identifier, std::make_unique<FunctionInfo>(dataType, parameterList));
 }
 
-void Context::addClass(const std::string &name, const std::map<std::string, std::unique_ptr<SymbolInfo>> &info)
+void Context::addClass(const std::string &name, const propertyInfo &info)
 {
     classTable.emplace(name, std::make_unique<ClassInfo>(info));
 }
 
-void Context::addClass(const std::string &name, std::map<std::string, std::unique_ptr<SymbolInfo>> &&info)
+void Context::addClass(const std::string &name, propertyInfo &&info)
 {
     classTable.emplace(name, std::make_unique<ClassInfo>(std::move(info)));
 }

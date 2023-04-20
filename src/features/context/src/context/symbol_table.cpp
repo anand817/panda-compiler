@@ -1,43 +1,24 @@
 #include <context/symbol_table.hpp>
 
+// SymbolInfo
+
+SymbolInfo::SymbolInfo(const std::string &dataType) : dataType(dataType) {}
+SymbolInfo::SymbolInfo(std::string &&dataType) : dataType(std::move(dataType)) {}
+
 // VariableInfo
 
-VariableInfo::VariableInfo(std::string dataType, const allType &data) : value(data)
-{
-    this->dataType = dataType;
-}
+VariableInfo::VariableInfo(const std::string &dataType, const valueType &data) : SymbolInfo(dataType), valueContainer(data) {}
+VariableInfo::VariableInfo(const std::string &dataType, valueType &&data) : SymbolInfo(dataType), valueContainer(std::move(data)) {}
 
-VariableInfo::VariableInfo(std::string dataType, allType &&data) : value(std::move(data))
-{
-    this->dataType = dataType;
-}
-
-VariableInfo::VariableInfo(std::string dataType, const std::map<std::string, std::unique_ptr<SymbolInfo>> &properties) : value(properties)
-{
-    this->dataType = dataType;
-}
-
-VariableInfo::VariableInfo(std::string dataType, std::map<std::string, std::unique_ptr<SymbolInfo>> &&properties) : value(std::move(properties))
-{
-    this->dataType = dataType;
-}
-
-VariableInfo::VariableInfo(VariableInfo &&other) : value(std::move(other.value))
-{
-    dataType = std::move(other.dataType);
-}
-
-VariableInfo::VariableInfo(const VariableInfo &other) : value(other.value)
-{
-    dataType = other.dataType;
-}
+VariableInfo::VariableInfo(VariableInfo &&other) : SymbolInfo(std::move(other.dataType)), valueContainer(std::move(other.valueContainer)) {}
+VariableInfo::VariableInfo(const VariableInfo &other) : SymbolInfo(other.dataType), valueContainer(other.valueContainer) {}
 
 VariableInfo &VariableInfo::operator=(VariableInfo &&other)
 {
     if (this != &other)
     {
         dataType = std::move(other.dataType);
-        value = std::move(other.value);
+        valueContainer = std::move(other.valueContainer);
     }
 
     return *this;
@@ -48,7 +29,7 @@ VariableInfo &VariableInfo::operator=(const VariableInfo &other)
     if (this != &other)
     {
         dataType = other.dataType;
-        value = other.value;
+        valueContainer = other.valueContainer;
     }
 
     return *this;
@@ -66,23 +47,11 @@ std::unique_ptr<SymbolInfo> VariableInfo::clone()
 
 // FunctionInfo
 
-FunctionInfo::FunctionInfo(std::string dataType, std::vector<std::string> parameterList)
-{
-    this->dataType = dataType;
-    this->parameters = parameterList;
-}
+FunctionInfo::FunctionInfo(std::string dataType, std::vector<std::string> parameterList) : SymbolInfo(dataType), parameters(parameterList) {}
 
-FunctionInfo::FunctionInfo(FunctionInfo &&other)
-{
-    dataType = std::move(other.dataType);
-    this->parameters = std::move(other.parameters);
-}
+FunctionInfo::FunctionInfo(FunctionInfo &&other) : SymbolInfo(std::move(other.dataType)), parameters(std::move(other.parameters)) {}
 
-FunctionInfo::FunctionInfo(const FunctionInfo &other)
-{
-    dataType = other.dataType;
-    parameters = other.parameters;
-}
+FunctionInfo::FunctionInfo(const FunctionInfo &other) : SymbolInfo(other.dataType), parameters(other.parameters) {}
 
 FunctionInfo &FunctionInfo::operator=(FunctionInfo &&other)
 {

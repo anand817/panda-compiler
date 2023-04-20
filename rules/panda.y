@@ -3,7 +3,9 @@
     #include <string>
     #include <base/nodes.hpp>
     #include <variables/nodes.hpp>
+    #include <expressions/nodes.hpp>
     #include <utils/nodes.hpp>
+    #include <enums/type_enum.hpp>
     using namespace std;
 }
 
@@ -28,6 +30,7 @@
     StatementNode*                  statementNode;
     VariableDeclarationNode*        variableDeclarationNode;
     VariableDefinitionNode*         variableDefinitionNode;
+    ExpressionNode*                 expressionNode;
 }
 
 // Tokens Definition
@@ -78,8 +81,9 @@
 %type <variableDefinitionNode>  variable_definition
 %type <typeNode>                type
 %type <identifierNode>          identifier
-%type <typeNode>                
-%type <token>            '-' '+' '*' '/' '%' '&' '|' '^' '~' '!' '<' '>' '=' '(' ')' '{' '}' '[' ']' ',' ':' ';'
+%type <expressionNode>          expression
+%type <valueNode>               value
+%type <token>                   '-' '+' '*' '/' '%' '&' '|' '^' '~' '!' '<' '>' '=' '(' ')' '{' '}' '[' ']' ',' ':' ';'
 
 
 // associativity
@@ -120,14 +124,39 @@ statement_list:         statement                           { $$ = new Statement
 
 statement_block:        '{' '}'                             { $$ = new BlockNode(); }
                |        '{' statement_list '}'              { $$ = new BlockNode(*$2); delete $2; }
+               ;
 
 statement:              ';'                                 { $$ = new StatementNode(); }
-         |              variable_declaration                { $$ = $1 }
-         |              variable_definition                 { $$ = $1 }
+         |              variable_declaration                { $$ = $1; }
+         |              variable_definition                 { $$ = $1; }
+         ;
 
 variable_declaration:   type identifier ';'                 { $$ = new VariableDeclarationNode(*$1, *$2); delete $1; delete $2; }
+                    ;
 
-variable_definition:    type identifier '=' 
+variable_definition:    type identifier '=' expression ';'  { $$ = new VariableDefinitionNode(*$1, *$2, $4); delete $1; delete $2; } // $4 passed as a pointer
+                   ;
+
+expression:             value                               { $$ = new ExpressionNode(*$1); delete $1; }
+          ;
+
+value:                  INTEGER                             { $$ = new ValueNode(INT_TYPE, $1.value); }
+     |                  CHAR                                { $$ = new ValueNode(CHAR_TYPE, $1.value); }
+     |                  BOOL                                { $$ = new ValueNode(BOOL_TYPE, $1.value); }
+     |                  FLOAT                               { $$ = new ValueNode(FLOAT_TYPE, $1.value); }
+     |                  STRING                              { $$ = new ValueNode(STRING_TYPE, $1.value); }
+     ;
+
+type:                   TYPE_INT                            { $$ = new TypeNode(INT_TYPE); }
+    |                   TYPE_CHAR                           { $$ = new TypeNode(CHAR_TYPE); }
+    |                   TYPE_BOOL                           { $$ = new TypeNode(BOOL_TYPE); }
+    |                   TYPE_FLOAT                          { $$ = new TypeNode(FLOAT_TYPE); }
+    |                   TYPE_STRING                         { $$ = new TypeNode(STRING_TYPE); }
+    |                   TYPE_VOID                           { $$ = new TypeNode(VOID_TYPE); }
+    ;
+
+identifier:             IDENTIFIER                          { $$ = new IdentifierNode($1.value); }
+          ;
 
 
 %%

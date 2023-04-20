@@ -28,11 +28,11 @@ public:
     Context &operator=(const Context &other);
 
     // public methods
-    void addSymbol(const std::string &identifier, const std::string &dataType, const allType &data);
+    void addSymbol(const std::string &identifier, const std::string &dataType, const valueType &data);
     void addSymbol(const std::string &identifier, const std::string &dataType, const std::vector<std::string> &parameterList);
 
-    void addClass(const std::string &name, const std::map<std::string, std::unique_ptr<SymbolInfo>> &info);
-    void addClass(const std::string &name, std::map<std::string, std::unique_ptr<SymbolInfo>> &&info);
+    void addClass(const std::string &name, const propertyInfo &info);
+    void addClass(const std::string &name, propertyInfo &&info);
 
     friend class ContextHandler;
 };

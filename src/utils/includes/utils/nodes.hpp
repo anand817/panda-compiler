@@ -2,6 +2,9 @@
 #define UTILS_NODES_H
 
 #include <string>
+#include <context/object.hpp>
+#include <enums/type_enum.hpp>
+#include <cstring>
 
 // node deifinitions that doesn't need to run
 // i.e. that does not have any actual code
@@ -19,9 +22,7 @@ public:
 class TokenNode
 {
 public:
-    std::string value;
-
-    TokenNode(const std::string &value);
+    const char *value;
 };
 
 // for identifiers
@@ -39,9 +40,10 @@ class ValueNode
 {
 public:
     std::string type;
-    std::string value;
+    valueType value;
 
-    ValueNode(const std::string &type, const std::string &value);
+    ValueNode(const std::string &type, const valueType &value);
+    ValueNode(const std::string &type, const char *raw_value);
 };
 
 #endif // UTILS_NODES_H

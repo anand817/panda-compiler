@@ -90,7 +90,7 @@ void saveToken(){
 }
 
 void saveLiteral(){
-    yylval.token.value = literal;
+    yylval.token.value = literal.c_str();
 }
 
 int yywrap() {

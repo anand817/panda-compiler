@@ -5,25 +5,13 @@
 #include <map>
 #include <memory>
 
-class SymbolInfo;
+struct objectType;
 
-typedef std::variant<int, float, std::string, bool, char> allType;
-class Object
+typedef std::variant<int, float, std::string, bool, char, objectType> valueType;
+
+struct objectType
 {
-public:
-    std::map<std::string, std::unique_ptr<SymbolInfo>> properties;
-    allType data;
-    bool isObject = false;
-
-    Object(const std::map<std::string, std::unique_ptr<SymbolInfo>> &properties);
-    Object(std::map<std::string, std::unique_ptr<SymbolInfo>> &&properties);
-    Object(const allType &data);
-    Object(allType &&data);
-    Object(const Object &other);
-    Object(Object &&other);
-
-    Object &operator=(Object &&other);
-    Object &operator=(const Object &other);
+    std::map<std::string, valueType> object;
 };
 
 #endif // OBJECT_H
