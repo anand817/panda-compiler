@@ -94,7 +94,21 @@ void ContextHandler::addSymbol(const std::string &identifier, const typeInfo &da
 void ContextHandler::updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
 {
     Context &context = getInstance().getContext();
-    context.updateSymbol(identifier, dataType, data);
+    std::unique_ptr<SymbolInfo> &symbolInfo = findSymbol(identifier);
+    if (symbolInfo == nullptr)
+    {
+        throw "identifier " + identifier + " not found";
+    }
+    if (getTypeString(symbolInfo->dataType) != getTypeString(dataType))
+    {
+        throw "unmatching type of variable " + identifier + " while assigning";
+    }
+    VariableInfo *variableInfo = dynamic_cast<VariableInfo *>(symbolInfo.get());
+    if (!variableInfo)
+    {
+        throw identifier + " is not a variable ( check if its a function )";
+    }
+    variableInfo->valueContainer = data;
 }
 
 void ContextHandler::addClass(const std::string &name, const classTypeInfo &info)

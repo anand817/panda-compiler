@@ -1,12 +1,16 @@
-int a = 3;
-char b = 'a';
-string c = "abcd";
-bool d = true;
-float f = 2.31;
-int p;
-char q;
-{
-    int r = 2;
-    int s = 3;
-    char t;
-}
+int a = 2 * 3 + 2;
+int b = 2 * ( 3 + 2 );
+a;
+b;
+int c = ++a;
+int e = ++++b;
+string s = "abcd";
+string p = "cdgf";
+string q = s + p;
+a;
+b;
+c;
+e;
+s;
+p;
+q;

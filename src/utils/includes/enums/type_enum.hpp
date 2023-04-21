@@ -1,5 +1,5 @@
-#ifndef UTILS_TYPE_ENUMS_H
-#define UTILS_TYPE_ENUMS_H
+#ifndef UTILS_TYPE_ENUM_H
+#define UTILS_TYPE_ENUM_H
 
 #include <string>
 #include <context/object.hpp>
@@ -14,4 +14,4 @@ const std::string VOID_TYPE = "void";
 
 valueType getDefaultValue(const std::string type);
 
-#endif // UTILS_TYPE_ENUMS_H
+#endif // UTILS_TYPE_ENUM_H

@@ -43,12 +43,20 @@ public:
 // update to support rvalue objects
 class ValueNode
 {
-public:
-    std::string type;
-    valueType value;
+private:
+    void assignType(const valueType &value);
 
-    ValueNode(const std::string &type, const valueType &value);
+public:
+    valueType value;
+    typeInfo type;
+
+    ValueNode();
+    ValueNode(const valueType &value);
+    ValueNode(const typeInfo &type, const valueType &value);
     ValueNode(const std::string &type, const char *raw_value);
+
+    // assigns the value as well as type
+    void assignValue(const valueType &value);
     void print(std::string prefix);
 };
 

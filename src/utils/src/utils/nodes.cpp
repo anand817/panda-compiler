@@ -26,7 +26,9 @@ void IdentifierNode::print(std::string prefix)
     std::cout << prefix << "Identifier Node with name: " << name << std::endl;
 }
 
-ValueNode::ValueNode(const std::string &type, const valueType &value) : type(type), value(value) {}
+ValueNode::ValueNode() {}
+
+ValueNode::ValueNode(const typeInfo &type, const valueType &value) : type(type), value(value) {}
 
 ValueNode::ValueNode(const std::string &type, const char *raw_value) : type(type)
 {
@@ -59,30 +61,81 @@ ValueNode::ValueNode(const std::string &type, const char *raw_value) : type(type
     }
     else
     {
+        // TODO: find class in class type and assign type to classInfoType
         throw "invalid type";
     }
 }
 
+ValueNode::ValueNode(const valueType &value) : value(value)
+{
+    assignType(value);
+}
+
+void ValueNode::assignType(const valueType &value)
+{
+    switch (value.index())
+    {
+    case 0:
+        type = INT_TYPE;
+        std::cout << "int assign for value " << std::get<int>(value);
+        break;
+    case 1:
+        type = FLOAT_TYPE;
+        std::cout << "float assign for value " << std::get<float>(value);
+        break;
+    case 2:
+        type = STRING_TYPE;
+        std::cout << "string assign for value " << std::get<std::string>(value);
+        break;
+    case 3:
+        std::cout << "bool assign for value " << std::get<bool>(value);
+        type = BOOL_TYPE;
+        break;
+    case 4:
+        std::cout << "char assign for value " << std::get<char>(value);
+        type = CHAR_TYPE;
+        break;
+    case 5:
+        std::cout << "class type assign for value ";
+        type = classTypeInfo();
+        break;
+    default:
+        std::cout << "type is not assigned ";
+        break;
+    }
+
+    std::cout << std::endl;
+}
+
+void ValueNode::assignValue(const valueType &value)
+{
+    std::cout << "assign value called" << std::endl;
+    this->value = value;
+    assignType(value);
+}
+
 void ValueNode::print(std::string preifx)
 {
-    std::cout << preifx << "Value Node with type " << type << " and value ";
-    if (type == INT_TYPE)
+    std::cout << preifx << "Value Node with type " << getTypeString(type) << " and value ";
+
+    // TODO: overload can be used
+    if (getTypeString(type) == INT_TYPE)
     {
         std::cout << std::get<int>(value);
     }
-    else if (type == BOOL_TYPE)
+    else if (getTypeString(type) == BOOL_TYPE)
     {
         std::cout << std::get<bool>(value);
     }
-    else if (type == FLOAT_TYPE)
+    else if (getTypeString(type) == FLOAT_TYPE)
     {
         std::cout << std::get<float>(value);
     }
-    else if (type == CHAR_TYPE)
+    else if (getTypeString(type) == CHAR_TYPE)
     {
         std::cout << std::get<char>(value);
     }
-    else if (type == STRING_TYPE)
+    else if (getTypeString(type) == STRING_TYPE)
     {
         std::cout << std::get<std::string>(value);
     }

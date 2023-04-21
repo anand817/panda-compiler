@@ -73,29 +73,29 @@ void Context::addSymbol(const std::string &identifier, const typeInfo &dataType,
     }
 }
 
-void Context::updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
-{
-    if (symbolTable.find(identifier) == symbolTable.end())
-    {
-        symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
-    }
-    else
-    {
-        std::unique_ptr<SymbolInfo> &symbolInfo = symbolTable[identifier];
-        if (getTypeString(symbolInfo->dataType) != getTypeString(dataType))
-        {
-            throw "unmatching type";
-        }
+// void Context::updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
+// {
+//     if (symbolTable.find(identifier) == symbolTable.end())
+//     {
+//         symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
+//     }
+//     else
+//     {
+//         std::unique_ptr<SymbolInfo> &symbolInfo = symbolTable[identifier];
+//         if (getTypeString(symbolInfo->dataType) != getTypeString(dataType))
+//         {
+//             throw "unmatching type";
+//         }
 
-        VariableInfo *variableInfo = dynamic_cast<VariableInfo *>(symbolInfo.get());
-        if (variableInfo)
-        {
-            throw "not a variable";
-        }
+//         VariableInfo *variableInfo = dynamic_cast<VariableInfo *>(symbolInfo.get());
+//         if (variableInfo)
+//         {
+//             throw "not a variable";
+//         }
 
-        variableInfo->valueContainer = data;
-    }
-}
+//         variableInfo->valueContainer = data;
+//     }
+// }
 
 void Context::addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::string> &parameterList)
 {

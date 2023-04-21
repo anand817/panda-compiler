@@ -5,6 +5,7 @@
 #include <context/object.hpp>
 #include <expressions/nodes.hpp>
 #include <context/context_handler.hpp>
+#include <context/class_table.hpp>
 
 class VariableDeclarationNode : public DeclarationNode
 {

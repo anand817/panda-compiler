@@ -3,6 +3,8 @@
 
 #include <base/nodes.hpp>
 #include <context/object.hpp>
+#include <context/class_table.hpp>
+#include <enums/operation_enum.hpp>
 
 class ExpressionNode : public StatementNode
 {
@@ -10,6 +12,8 @@ public:
     ValueNode valueNode;
 
 public:
+    // to instantiate empty valued expression when uninitiazed
+    ExpressionNode();
     ExpressionNode(const ValueNode &valueNode);
     ExpressionNode(ValueNode &&valueNode);
 
@@ -19,10 +23,87 @@ public:
     ExpressionNode &operator=(const ExpressionNode &other);
     ExpressionNode &operator=(ExpressionNode &&other);
 
+    ExpressionNode *clone();
+
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
     virtual void run();
     virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+};
+
+class IdentifierExpressionNode : public ExpressionNode
+{
+    IdentifierNode identifierNode;
+
+public:
+    IdentifierExpressionNode(const IdentifierNode &identifierNode);
+    IdentifierExpressionNode(IdentifierNode &&identifierNode);
+
+    IdentifierExpressionNode(const IdentifierExpressionNode &other);
+    IdentifierExpressionNode(IdentifierExpressionNode &&other);
+
+    IdentifierExpressionNode &operator=(const IdentifierExpressionNode &other);
+    IdentifierExpressionNode &operator=(IdentifierExpressionNode &&other);
+
+    IdentifierExpressionNode *clone();
+
+    virtual std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+};
+
+class UnaryExpressionNode : public ExpressionNode
+{
+public:
+    ExpressionNode *expression;
+    UNARY_OPERATOR operation;
+
+public:
+    UnaryExpressionNode(ExpressionNode *const &expression, UNARY_OPERATOR operation);
+
+    UnaryExpressionNode(const UnaryExpressionNode &other);
+    UnaryExpressionNode(UnaryExpressionNode &&other);
+
+    UnaryExpressionNode &operator=(const UnaryExpressionNode &other);
+    UnaryExpressionNode &operator=(UnaryExpressionNode &&other);
+
+    ExpressionNode *clone();
+
+    virtual std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+};
+
+class BinaryExpressionNode : public ExpressionNode
+{
+public:
+    ExpressionNode *left_expression, *right_expression;
+    BINARY_OPERATOR operation;
+
+    BinaryExpressionNode(ExpressionNode *const &left_expression, ExpressionNode *const &right_expression, BINARY_OPERATOR operation);
+
+    BinaryExpressionNode(const BinaryExpressionNode &other);
+    BinaryExpressionNode(BinaryExpressionNode &&other);
+
+    BinaryExpressionNode &operator=(const BinaryExpressionNode &other);
+    BinaryExpressionNode &operator=(BinaryExpressionNode &&other);
+
+    ExpressionNode *clone();
+
+    virtual std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
 };
 
 #endif // EXPRESSION_NODES_H

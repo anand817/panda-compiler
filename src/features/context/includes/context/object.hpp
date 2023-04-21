@@ -15,6 +15,14 @@ struct objectType
     std::map<std::string, valueType> object;
 };
 
+template <class... Ts>
+struct overload : Ts...
+{
+    using Ts::operator()...;
+};
+template <class... Ts>
+overload(Ts...) -> overload<Ts...>;
+
 bool matchType(const valueType &value, typeInfo &type);
 
 std::string getTypeString(const typeInfo &type);

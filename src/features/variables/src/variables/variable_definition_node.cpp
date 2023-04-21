@@ -14,10 +14,28 @@ bool VariableDefinitionNode::analyze()
 
 void VariableDefinitionNode::run()
 {
-    if (getTypeString(typeNode.type) != expressionNode->valueNode.type)
-    {
-        throw "mismatched types";
-    }
+    overload type_overload{
+        [](std::string &variableType, std::string expressionType)
+        {
+            if (variableType != expressionType)
+            {
+                throw("mismatched types " + variableType + " and " + expressionType);
+            }
+        },
+        [](classTypeInfo &variableType, classTypeInfo &expressionType)
+        {
+            if (variableType.className != expressionType.className)
+            {
+                throw "mismatched class types";
+            }
+        },
+        [](auto &variableType, auto &expressionType)
+        {
+            throw "mismatched auto types";
+        }};
+
+    expressionNode->run();
+    std::visit(type_overload, typeNode.type, expressionNode->valueNode.type);
     ContextHandler::addSymbol(identifierNode.name, typeNode.type, expressionNode->valueNode.value);
 }
 

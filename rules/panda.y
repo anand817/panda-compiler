@@ -6,6 +6,7 @@
     #include <expressions/nodes.hpp>
     #include <utils/nodes.hpp>
     #include <enums/type_enum.hpp>
+    #include <enums/operation_enum.hpp>
     using namespace std;
 }
 
@@ -91,12 +92,12 @@
 %right      '='
 %left       LOGICAL_OR
 %left       LOGICAL_AND
-/* %left       '|' */
-/* %left       '^' */
-/* %left       '&' */
+%left       '|'
+%left       '^'
+%left       '&'
 %left       EQUAL NOT_EQUAL
 %left       LESS_EQUAL GREATER_EQUAL '<' '>'
-/* %left       SHR SHL */
+%left       SHR SHL
 %left       '-' '+'
 %left       '*' '/' '%'
 %right      '!' '~'
@@ -127,17 +128,50 @@ statement_block:        '{' '}'                             { $$ = new BlockNode
                ;
 
 statement:              ';'                                 { $$ = new StatementNode(); }
-         |              variable_declaration                { $$ = $1; }
-         |              variable_definition                 { $$ = $1; }
+         |              variable_declaration ';'            { $$ = $1; }
+         |              variable_definition ';'             { $$ = $1; }
+         |              expression ';'                      { $$ = $1; }
          ;
 
-variable_declaration:   type identifier ';'                 { $$ = new VariableDeclarationNode(*$1, *$2); delete $1; delete $2; }
+variable_declaration:   type identifier                     { $$ = new VariableDeclarationNode(*$1, *$2); delete $1; delete $2; }
                     ;
 
-variable_definition:    type identifier '=' expression ';'  { $$ = new VariableDefinitionNode(*$1, *$2, $4); delete $1; delete $2; } // $4 passed as a pointer
+variable_definition:    type identifier '=' expression      { $$ = new VariableDefinitionNode(*$1, *$2, $4); delete $1; delete $2; } // $4 passed as a pointer
                    ;
 
-expression:             value                               { $$ = new ExpressionNode(*$1); delete $1; }
+expression:             expression '+' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::ADD); }
+          |             expression '-' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::SUBTRACT); }
+          |             expression '*' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::MULTIPLY); }
+          |             expression '/' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::DIVIDE); }
+          |             expression '=' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::ASSIGN); }
+          |             expression '%' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::MODULUS); }
+          |             expression '|' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::OR); }
+          |             expression LOGICAL_OR expression    { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::LOGICAL_OR); }
+          |             expression '&' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::AND); }
+          |             expression LOGICAL_AND expression   { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::LOGICAL_AND); }
+          |             expression '^' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::XOR); }
+          |             expression SHL expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::SHIFT_LEFT); }
+          |             expression SHR expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::SHIFT_RIGHT); }
+          |             expression '>' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::GREATER); }
+          |             expression GREATER_EQUAL expression { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::GREATER_EQUAL); }
+          |             expression '<' expression           { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::LESSER); }
+          |             expression LESS_EQUAL expression    { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::LESSER_EQUAL); }
+          |             expression EQUAL expression         { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::EQUAL); }
+          |             expression NOT_EQUAL expression     { $$ = new BinaryExpressionNode($1, $3, BINARY_OPERATOR::NOT_EQUAL); }
+
+          |             '+' expression %prec U_PLUS         { $$ = new UnaryExpressionNode($2, UNARY_OPERATOR::UNARY_PLUS); }
+          |             '-' expression %prec U_MINUM        { $$ = new UnaryExpressionNode($2, UNARY_OPERATOR::UNARY_MINUS); }
+          |             '~' expression                      { $$ = new UnaryExpressionNode($2, UNARY_OPERATOR::NOT); }
+          |             '!' expression                      { $$ = new UnaryExpressionNode($2, UNARY_OPERATOR::LOGICAL_NOT); }
+
+          |             INC expression %prec PRE_INC        { $$ = new UnaryExpressionNode($2, UNARY_OPERATOR::PRE_INCREMENT); }
+          |             DEC expression %prec PRE_DEC        { $$ = new UnaryExpressionNode($2, UNARY_OPERATOR::PRE_DECREMENT); } 
+          |             expression INC %prec SUF_INC        { $$ = new UnaryExpressionNode($1, UNARY_OPERATOR::POST_INCREMENT); }
+          |             expression DEC %prec SUF_DEC        { $$ = new UnaryExpressionNode($1, UNARY_OPERATOR::POST_DECREMENT); }
+
+          |             '(' expression ')'                  { $$ = $2; }
+          |             identifier                          { $$ = new IdentifierExpressionNode(*$1); delete $1; }
+          |             value                               { $$ = new ExpressionNode(*$1); delete $1; }
           ;
 
 value:                  INTEGER                             { $$ = new ValueNode(INT_TYPE, $1.value); }

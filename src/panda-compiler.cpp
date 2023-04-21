@@ -82,19 +82,26 @@ int main(int argc, char *argv[])
 
     if (programmeRoot)
     {
-        for (auto statement : *programmeRoot)
-        {
-            statement->print("");
-        }
 
         try
         {
+
+            for (auto statement : *programmeRoot)
+            {
+                statement->print("");
+            }
+
             ContextHandler::pushContext();
             for (auto statement : *programmeRoot)
             {
                 statement->run();
             }
             ContextHandler::popContext();
+
+            for (auto statement : *programmeRoot)
+            {
+                statement->print("");
+            }
         }
         catch (const char *e)
         {
