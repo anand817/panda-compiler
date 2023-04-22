@@ -25,7 +25,7 @@ public:
 
 public:
     static ContextHandler &getInstance();
-    static void pushContext();
+    static void pushContext(SCOPE_TYPE scope_type);
     static void popContext();
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
@@ -36,7 +36,7 @@ public:
     static void printTable();
 
 private:
-    void pushContextImpl();
+    void pushContextImpl(SCOPE_TYPE scope_type);
     void popContextImpl();
     std::unique_ptr<SymbolInfo> &findSymbolImpl(const std::string &identifier);
     void printTableImpl();

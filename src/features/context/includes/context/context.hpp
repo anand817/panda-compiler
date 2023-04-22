@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include <context/symbol_table.hpp>
+#include <enums/scope_type_enum.hpp>
 #include <context/class_table.hpp>
 #include <base/nodes.hpp>
 
@@ -14,14 +15,15 @@ class BlockNode;
 class Context
 {
     int id;
+    SCOPE_TYPE scope_type;
     std::map<std::string, std::unique_ptr<SymbolInfo>> symbolTable;
     std::map<std::string, std::unique_ptr<ClassInfo>> classTable;
 
 public:
     // constructors
-    Context(int id);
-    Context(int id, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable);
-    Context(int id, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable);
+    Context(int id, SCOPE_TYPE type);
+    Context(int id, const SCOPE_TYPE &type, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable);
+    Context(int id, SCOPE_TYPE &&type, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable);
     Context(Context &&other);
     Context(const Context &other);
 

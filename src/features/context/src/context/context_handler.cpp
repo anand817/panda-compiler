@@ -8,16 +8,16 @@ ContextHandler &ContextHandler::getInstance()
     return instance;
 }
 
-void ContextHandler::pushContextImpl()
+void ContextHandler::pushContextImpl(SCOPE_TYPE scope_type)
 {
-    contextStack.emplace_back(contextCounter);
+    contextStack.emplace_back(contextCounter, scope_type);
     contextCounter += 1;
 }
 
-void ContextHandler::pushContext()
+void ContextHandler::pushContext(SCOPE_TYPE scope_type)
 {
     ContextHandler &instance = getInstance();
-    instance.pushContextImpl();
+    instance.pushContextImpl(scope_type);
 }
 
 void ContextHandler::popContextImpl()

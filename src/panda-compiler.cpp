@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
                 statement->print("");
             }
 
-            ContextHandler::pushContext();
+            ContextHandler::pushContext(SCOPE_TYPE::BLOCK_SCOPE);
             for (auto statement : *programmeRoot)
             {
                 statement->run();

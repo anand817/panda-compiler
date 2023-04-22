@@ -30,7 +30,7 @@ enum class BINARY_OPERATOR
 };
 
 std::ostream &operator<<(std::ostream &out, const BINARY_OPERATOR &operation);
-// unar operators
+// unary operators
 
 enum class UNARY_OPERATOR
 {

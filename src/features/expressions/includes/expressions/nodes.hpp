@@ -35,6 +35,7 @@ public:
 
 class IdentifierExpressionNode : public ExpressionNode
 {
+public:
     IdentifierNode identifierNode;
 
 public:
@@ -104,6 +105,31 @@ public:
     virtual void print(std::string prefix);
     virtual bool isLvalue();
     virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+};
+
+typedef std::vector<ExpressionNode *> ArgumentList;
+
+class FunctionCallNode : public IdentifierExpressionNode
+{
+public:
+    ArgumentList argumentList;
+
+    FunctionCallNode(const IdentifierNode &identifierNode, const ArgumentList &argumentList);
+
+    FunctionCallNode(const FunctionCallNode &other);
+    FunctionCallNode(FunctionCallNode &&other);
+
+    FunctionCallNode &operator=(const FunctionCallNode &other);
+    FunctionCallNode &operator=(FunctionCallNode &&other);
+
+    ExpressionNode *clone();
+
+    std::vector<std::string> generateCode();
+    bool analyze();
+    void run();
+    void print(std::string prefix);
+    bool isLvalue();
+    void updateSymbol(const typeInfo &dataType, const valueType &data);
 };
 
 #endif // EXPRESSION_NODES_H

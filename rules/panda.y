@@ -33,7 +33,9 @@
     VariableDeclarationNode*        variableDeclarationNode;
     VariableDefinitionNode*         variableDefinitionNode;
     FunctionDeclarationNode*        functionDeclarationNode;
+    FunctionCallNode*               functionCallNode;
     VariableList*                   variableList;
+    ArgumentList*                   argumentList;
     ExpressionNode*                 expressionNode;
 }
 
@@ -80,10 +82,12 @@
 %type <statementList>           program
 %type <statementList>           statement_list
 %type <variableList>            variable_list param_list
+%type <argumentList>            expression_list argument_list
 %type <statementNode>           statement
 %type <blockNode>               statement_block
 %type <variableDeclarationNode> variable_declaration
 %type <functionDeclarationNode> function_declaration function_header
+%type <functionCallNode>        function_call
 %type <variableDefinitionNode>  variable_definition
 %type <typeNode>                type
 %type <identifierNode>          identifier
@@ -146,6 +150,9 @@ function_header:        type identifier '(' param_list ')'     { $$ = new Functi
 
 function_declaration:   function_header statement_block        { $$ = $1; $$->assignBody($2); }
                     ;
+
+function_call:          identifier '(' argument_list ')'       { $$ = new FunctionCallNode(*$1, *$3); delete $1; delete $3; }
+             ;
     
 param_list:             /* epsilon */                          { $$ = new VariableList(); }
           |             variable_list                          { $$ = $1; }
@@ -154,6 +161,14 @@ param_list:             /* epsilon */                          { $$ = new Variab
 variable_list:          variable_declaration                   { $$ = new VariableList(); $$->push_back(*$1); delete $1; }
              |          variable_list ',' variable_declaration { $$ = $1; $$->push_back(*$3); delete $3; }
              ;
+
+argument_list:          /* epsilon */                          { $$ = new ArgumentList(); }
+             |          expression_list                        { $$ = $1; }
+             ;
+
+expression_list:        expression                             { $$ = new ArgumentList(); $$->push_back($1); }
+               |        expression_list ',' expression         { $$ = $1; $$->push_back($3); }
+               ;
 
 variable_definition:    type identifier '=' expression         { $$ = new VariableDefinitionNode(*$1, *$2, $4); delete $1; delete $2; } // $4 passed as a pointer
                    ;
@@ -189,6 +204,7 @@ expression:             expression '+' expression              { $$ = new Binary
           |             expression DEC %prec SUF_DEC           { $$ = new UnaryExpressionNode($1, UNARY_OPERATOR::POST_DECREMENT); }
 
           |             '(' expression ')'                     { $$ = $2; }
+          |             function_call                          { $$ = $1; }
           |             identifier                             { $$ = new IdentifierExpressionNode(*$1); delete $1; }
           |             value                                  { $$ = new ExpressionNode(*$1); delete $1; }
           ;
