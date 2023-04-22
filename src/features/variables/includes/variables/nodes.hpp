@@ -20,7 +20,7 @@ public:
 
 class VariableDefinitionNode : public VariableDeclarationNode
 {
-private:
+public:
     ExpressionNode *expressionNode; // needed pointer for polymorphism
 
 public:

@@ -97,9 +97,9 @@ void Context::addSymbol(const std::string &identifier, const typeInfo &dataType,
 //     }
 // }
 
-void Context::addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::string> &parameterList)
+void Context::addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode)
 {
-    symbolTable.emplace(identifier, std::make_unique<FunctionInfo>(dataType, parameterList));
+    symbolTable.emplace(identifier, std::make_unique<FunctionInfo>(dataType, parameterList, functionBlockNode));
 }
 
 void Context::addClass(const std::string &name, const classTypeInfo &info)

@@ -1,13 +1,15 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
-#include <context/symbol_table.hpp>
-#include <context/class_table.hpp>
 #include <map>
 #include <vector>
 #include <memory>
+#include <context/symbol_table.hpp>
+#include <context/class_table.hpp>
+#include <base/nodes.hpp>
 
 class ContextHandler; // forward declaration to remove circuilar dependency
+class BlockNode;
 
 class Context
 {
@@ -30,7 +32,7 @@ public:
     // public methods
     // add or update symbol if already added
     void addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
-    void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::string> &parameterList);
+    void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
 
     void addClass(const std::string &name, const classTypeInfo &info);
     void addClass(const std::string &name, classTypeInfo &&info);

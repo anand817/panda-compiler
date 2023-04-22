@@ -1,4 +1,6 @@
 #include <base/nodes.hpp>
+#include <context/context_handler.hpp>
+#include <iostream>
 
 BlockNode::BlockNode() : statements({}) {}
 

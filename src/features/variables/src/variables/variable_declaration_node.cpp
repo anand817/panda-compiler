@@ -21,6 +21,5 @@ void VariableDeclarationNode::print(std::string prefix)
 {
     std::cout << prefix << "Variable declaration node" << std::endl;
     prefix += "\t-> ";
-    typeNode.print(prefix);
-    identifierNode.print(prefix);
+    DeclarationNode::print(prefix);
 }

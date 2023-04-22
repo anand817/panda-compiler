@@ -6,6 +6,7 @@
 #include <memory>
 #include <context/object.hpp>
 #include <context/class_table.hpp>
+#include <base/nodes.hpp>
 
 // abstrcat class
 class SymbolInfo
@@ -45,10 +46,11 @@ public:
 class FunctionInfo : public SymbolInfo
 {
 public:
-    std::vector<std::string> parameters;
+    std::vector<std::pair<std::string, typeInfo>> parameters;
+    BlockNode *functionBlockNode;
 
 public:
-    FunctionInfo(const typeInfo &dataType, std::vector<std::string> parameterList);
+    FunctionInfo(const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
     FunctionInfo(FunctionInfo &&other);
     FunctionInfo(const FunctionInfo &other);
 

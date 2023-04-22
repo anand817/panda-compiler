@@ -1,5 +1,4 @@
 #include <context/symbol_table.hpp>
-#include <context/object.hpp>
 
 // SymbolInfo
 
@@ -48,11 +47,14 @@ std::unique_ptr<SymbolInfo> VariableInfo::clone()
 
 // FunctionInfo
 
-FunctionInfo::FunctionInfo(const typeInfo &dataType, std::vector<std::string> parameterList) : SymbolInfo(dataType), parameters(parameterList) {}
+FunctionInfo::FunctionInfo(const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode) : SymbolInfo(dataType), parameters(parameterList), functionBlockNode(functionBlockNode) {}
 
-FunctionInfo::FunctionInfo(FunctionInfo &&other) : SymbolInfo(std::move(other.dataType)), parameters(std::move(other.parameters)) {}
+FunctionInfo::FunctionInfo(FunctionInfo &&other) : SymbolInfo(std::move(other.dataType)), parameters(std::move(other.parameters)), functionBlockNode(std::move(other.functionBlockNode)) {}
 
-FunctionInfo::FunctionInfo(const FunctionInfo &other) : SymbolInfo(other.dataType), parameters(other.parameters) {}
+FunctionInfo::FunctionInfo(const FunctionInfo &other) : SymbolInfo(other.dataType), parameters(other.parameters)
+{
+    *(this->functionBlockNode) = *functionBlockNode; // copy function block node
+}
 
 FunctionInfo &FunctionInfo::operator=(FunctionInfo &&other)
 {
@@ -78,12 +80,15 @@ FunctionInfo &FunctionInfo::operator=(const FunctionInfo &other)
 
 std::string FunctionInfo::getType()
 {
-    if (std::holds_alternative<std::string>(dataType))
+    std::string dtype = getTypeString(dataType);
+    dtype += " ( ";
+    for (auto &p : parameters)
     {
-        return std::get<std::string>(dataType);
+        dtype += getTypeString(p.second);
+        dtype += ", ";
     }
-
-    return std::get<classTypeInfo>(dataType).className;
+    dtype += " ) ";
+    return dtype;
 }
 
 std::unique_ptr<SymbolInfo> FunctionInfo::clone()

@@ -85,10 +85,10 @@ void ContextHandler::addSymbol(const std::string &identifier, const typeInfo &da
     context.addSymbol(identifier, dataType, data);
 }
 
-void ContextHandler::addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::string> &parameterList)
+void ContextHandler::addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode)
 {
     Context &context = getInstance().getContext();
-    context.addSymbol(identifier, dataType, parameterList);
+    context.addSymbol(identifier, dataType, parameterList, functionBlockNode);
 }
 
 void ContextHandler::updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)

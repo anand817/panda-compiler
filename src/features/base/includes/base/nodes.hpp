@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 #include <utils/nodes.hpp>
-#include <iostream>
-#include <context/context_handler.hpp>
 
 class Node
 {
@@ -48,12 +46,14 @@ public:
 // abstract class for declaration
 class DeclarationNode : public StatementNode
 {
-protected:
+public:
     TypeNode typeNode;
     IdentifierNode identifierNode;
 
 public:
     DeclarationNode(const TypeNode &type, const IdentifierNode &identifier);
+
+    virtual void print(std::string prefix);
 };
 
 #endif // BASE_NODES_H

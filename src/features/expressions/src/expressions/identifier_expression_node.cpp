@@ -1,4 +1,5 @@
 #include <expressions/nodes.hpp>
+#include <context/context_handler.hpp>
 
 IdentifierExpressionNode::IdentifierExpressionNode(const IdentifierNode &identifierNode)
     : ExpressionNode(),

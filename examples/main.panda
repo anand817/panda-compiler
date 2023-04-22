@@ -1,16 +1,3 @@
-int a = 2 * 3 + 2;
-int b = 2 * ( 3 + 2 );
-a;
-b;
-int c = ++a;
-int e = ++++b;
-string s = "abcd";
-string p = "cdgf";
-string q = s + p;
-a;
-b;
-c;
-e;
-s;
-p;
-q;
+int main(){
+    
+}

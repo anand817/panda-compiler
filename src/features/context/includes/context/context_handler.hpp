@@ -6,6 +6,8 @@
 #include <iostream>
 #include <stack>
 
+class BlockNode; // forward declaration
+
 // singleton class that handles context in the programme
 class ContextHandler
 {
@@ -26,7 +28,7 @@ public:
     static void pushContext();
     static void popContext();
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
-    static void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::string> &parameterList);
+    static void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
     static void updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
     static void addClass(const std::string &name, const classTypeInfo &info);
     static void addClass(const std::string &name, classTypeInfo &&info);
