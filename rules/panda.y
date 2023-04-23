@@ -35,6 +35,7 @@
     FunctionDeclarationNode*        functionDeclarationNode;
     FunctionCallNode*               functionCallNode;
     PrintNode*                      printNode;
+    InputNode*                      inputNode;
     ReturnStatementNode*            returnStatementNode;
     VariableList*                   variableList;
     ArgumentList*                   argumentList;
@@ -61,6 +62,7 @@
 %token <token> CONTINUE
 %token <token> RETURN
 %token <token> PRINT
+%token <token> INPUT
 
 // Operators
 %token <token> INC
@@ -92,6 +94,7 @@
 %type <functionDeclarationNode> function_declaration function_header
 %type <functionCallNode>        function_call
 %type <printNode>               print
+%type <inputNode>               input
 %type <variableDefinitionNode>  variable_definition
 %type <returnStatementNode>     return_statement
 %type <typeNode>                type
@@ -165,6 +168,7 @@ function_call:          identifier '(' argument_list ')'       { $$ = new Functi
              ;
 
 print:                  PRINT '(' argument_list ')'            { $$ = new PrintNode(*$3); delete $3; }
+input:                  INPUT '(' argument_list ')'            { $$ = new InputNode(*$3); delete $3; }
     
 param_list:             /* epsilon */                          { $$ = new VariableList(); }
           |             variable_list                          { $$ = $1; }
@@ -218,6 +222,7 @@ expression:             expression '+' expression              { $$ = new Binary
           |             '(' expression ')'                     { $$ = $2; }
           |             function_call                          { $$ = $1; }
           |             print                                  { $$ = $1; }
+          |             input                                  { $$ = $1; }
           |             identifier                             { $$ = new IdentifierExpressionNode(*$1); delete $1; }
           |             value                                  { $$ = new ExpressionNode(*$1); delete $1; }
           ;

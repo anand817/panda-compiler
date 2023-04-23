@@ -4,6 +4,7 @@
 #include <base/nodes.hpp>
 #include <context/object.hpp>
 #include <context/class_table.hpp>
+#include <context/symbol_table.hpp>
 #include <enums/operation_enum.hpp>
 
 class ExpressionNode : public StatementNode
@@ -31,6 +32,7 @@ public:
     virtual void print(std::string prefix);
     virtual bool isLvalue();
     virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
 class IdentifierExpressionNode : public ExpressionNode
@@ -56,6 +58,7 @@ public:
     virtual void print(std::string prefix);
     virtual bool isLvalue();
     virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
 class UnaryExpressionNode : public ExpressionNode
@@ -81,6 +84,7 @@ public:
     virtual void print(std::string prefix);
     virtual bool isLvalue();
     virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
 class BinaryExpressionNode : public ExpressionNode
@@ -105,6 +109,7 @@ public:
     virtual void print(std::string prefix);
     virtual bool isLvalue();
     virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
 typedef std::vector<ExpressionNode *> ArgumentList;
@@ -131,6 +136,7 @@ public:
     virtual void print(std::string prefix);
     virtual bool isLvalue();
     virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
 class PrintNode : public FunctionCallNode
@@ -152,6 +158,29 @@ public:
     virtual void print(std::string prefix);
     virtual bool isLvalue();
     virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
+};
+
+class InputNode : public FunctionCallNode
+{
+public:
+    InputNode(const ArgumentList &argumentList);
+
+    InputNode(const InputNode &other);
+    InputNode(InputNode &&other);
+
+    InputNode &operator=(const InputNode &other);
+    InputNode &operator=(InputNode &&other);
+
+    ExpressionNode *clone();
+
+    std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
 #endif // EXPRESSION_NODES_H

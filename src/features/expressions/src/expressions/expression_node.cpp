@@ -56,6 +56,11 @@ void ExpressionNode::updateSymbol(const typeInfo &dataType, const valueType &dat
     throw "constant expression is not an lvalue";
 }
 
+std::unique_ptr<SymbolInfo> &ExpressionNode::getSymbol()
+{
+    throw "constant expression is not an lvalue";
+}
+
 void ExpressionNode::print(std::string prefix)
 {
     std::cout << prefix << "single valued Expression Node" << std::endl;

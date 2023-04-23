@@ -80,6 +80,12 @@ void IdentifierExpressionNode::updateSymbol(const typeInfo &dataType, const valu
     ContextHandler::updateSymbol(identifierNode.name, dataType, data);
 }
 
+std::unique_ptr<SymbolInfo> &IdentifierExpressionNode::getSymbol()
+{
+    std::unique_ptr<SymbolInfo> &symbolInfo = ContextHandler::findSymbol(identifierNode.name);
+    return symbolInfo;
+}
+
 void IdentifierExpressionNode::print(std::string prefix)
 {
     std::cout << prefix << "identifier Expression Node" << std::endl;

@@ -19,10 +19,24 @@ std::ostream &operator<<(std::ostream &out, const valueType &value)
 {
     overload print_overload{
         [&out](objectType &a)
-        { out << "object cannot be printed"; },
+        { throw "object input cannot be taken"; },
         [&out](auto &a)
-        { std::cout << a; }};
+        { out << a; }};
 
     std::visit(print_overload, value);
     return out;
+}
+
+std::istream &operator>>(std::istream &in, valueType &value)
+{
+    overload input_overload{
+        [&in](objectType &a)
+        { throw "object input cannot be taken"; },
+        [&in](auto &a)
+        {
+            in >> a;
+        }};
+
+    std::visit(input_overload, value);
+    return in;
 }

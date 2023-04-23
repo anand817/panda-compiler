@@ -74,5 +74,10 @@ bool PrintNode::isLvalue()
 
 void PrintNode::updateSymbol(const typeInfo &dataType, const valueType &data)
 {
-    throw "function call is not an lvalue";
+    throw "print function call is not an lvalue";
+}
+
+std::unique_ptr<SymbolInfo> &PrintNode::getSymbol()
+{
+    throw "print function call is not an lvalue";
 }

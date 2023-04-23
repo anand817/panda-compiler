@@ -118,3 +118,8 @@ void FunctionCallNode::updateSymbol(const typeInfo &dataType, const valueType &d
 {
     throw "function call is not an lvalue";
 }
+
+std::unique_ptr<SymbolInfo> &FunctionCallNode::getSymbol()
+{
+    throw "function call is not an lvalue";
+}

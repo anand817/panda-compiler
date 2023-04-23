@@ -187,6 +187,16 @@ void UnaryExpressionNode::updateSymbol(const typeInfo &dataType, const valueType
     }
     expression->updateSymbol(dataType, data);
 }
+
+std::unique_ptr<SymbolInfo> &UnaryExpressionNode::getSymbol()
+{
+    if (!this->isLvalue())
+    {
+        throw "unary expression with given operator is not an lvalue";
+    }
+    return expression->getSymbol();
+}
+
 void UnaryExpressionNode::print(std::string prefix)
 {
     std::cout << prefix << "Unary Expression Node" << std::endl;

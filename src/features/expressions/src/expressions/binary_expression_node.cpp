@@ -341,6 +341,11 @@ void BinaryExpressionNode::updateSymbol(const typeInfo &dataType, const valueTyp
     throw "binary expression is not an lvalue";
 }
 
+std::unique_ptr<SymbolInfo> & BinaryExpressionNode::getSymbol()
+{
+    throw "binary expression is not an lvalue";
+}
+
 void BinaryExpressionNode::print(std::string prefix)
 {
     std::cout << prefix << "Binary Expression Node" << std::endl;
