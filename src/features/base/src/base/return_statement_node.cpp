@@ -2,6 +2,7 @@
 #include <context/context_handler.hpp>
 #include <enums/scope_type_enum.hpp>
 #include <expressions/nodes.hpp>
+#include <context/object.hpp>
 
 ReturnStatementNode::ReturnStatementNode() : expressionNode(NULL) {}
 

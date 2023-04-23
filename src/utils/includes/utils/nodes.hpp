@@ -54,7 +54,7 @@ public:
     ValueNode(const valueType &value);
     ValueNode(const typeInfo &type, const valueType &value);
     ValueNode(const std::string &type, const char *raw_value);
-
+    ValueNode(const ValueNode &other);
     // assigns the value as well as type
     void assignValue(const valueType &value);
     void print(std::string prefix);

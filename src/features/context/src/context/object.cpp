@@ -33,9 +33,7 @@ std::istream &operator>>(std::istream &in, valueType &value)
         [&in](objectType &a)
         { throw "object input cannot be taken"; },
         [&in](auto &a)
-        {
-            in >> a;
-        }};
+        { in >> a; }};
 
     std::visit(input_overload, value);
     return in;

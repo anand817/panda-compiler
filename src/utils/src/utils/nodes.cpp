@@ -71,6 +71,10 @@ ValueNode::ValueNode(const valueType &value) : value(value)
     assignType(value);
 }
 
+ValueNode::ValueNode(const ValueNode &other)
+    : value(other.value),
+      type(other.type) {}
+
 void ValueNode::assignType(const valueType &value)
 {
     switch (value.index())

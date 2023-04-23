@@ -58,9 +58,12 @@ bool BinaryExpressionNode::analyze()
 }
 void BinaryExpressionNode::run()
 {
-
     left_expression->run();
+    // copy the value to a new valueNode as it may get updated after running right expression
+    ValueNode leftChildValueNode(left_expression->valueNode);
     right_expression->run();
+    ValueNode rightChildValueNode(right_expression->valueNode);
+
     overload add_overload{
         [this](int &a, int &b)
         { valueNode.assignValue(a + b); },
@@ -257,9 +260,6 @@ void BinaryExpressionNode::run()
         [this](auto &a, auto &b)
         { throw "operation not allowed on this pair of data type"; }};
 
-    ValueNode &leftChildValueNode = left_expression->valueNode;
-    ValueNode &rightChildValueNode = right_expression->valueNode;
-
     switch (operation)
     {
     case BINARY_OPERATOR::ADD:
@@ -341,7 +341,7 @@ void BinaryExpressionNode::updateSymbol(const typeInfo &dataType, const valueTyp
     throw "binary expression is not an lvalue";
 }
 
-std::unique_ptr<SymbolInfo> & BinaryExpressionNode::getSymbol()
+std::unique_ptr<SymbolInfo> &BinaryExpressionNode::getSymbol()
 {
     throw "binary expression is not an lvalue";
 }

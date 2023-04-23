@@ -112,9 +112,9 @@ int main(int argc, char *argv[])
             std::cout << "Error: " << e << std::endl;
         }
 
-        std::cout << "\n\n------------ Symbol table -----------------\n\n";
+        // std::cout << "\n\n------------ Symbol table -----------------\n\n";
 
-        ContextHandler::printTable();
+        // ContextHandler::printTable();
     }
 
     fclose(yyin);

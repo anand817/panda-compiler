@@ -1,11 +1,8 @@
-int main(){
-    for(int a = 3; a <= 8; a++){
-        if(a >= 5){
-            return a;
-        }
-        print(a);
+int fib(int n){
+    if(n == 0 || n == 1){
+        return 1;
     }
+    return fib(n-1) + fib(n-2);
 }
 
-int p = main();
-print("value of p: ",p);
+print(fib(6));
