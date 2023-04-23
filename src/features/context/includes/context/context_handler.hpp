@@ -11,8 +11,8 @@ class BlockNode; // forward declaration
 // singleton class that handles context in the programme
 class ContextHandler
 {
-    std::vector<Context> contextStack;
-    std::vector<Context> poppedContextStack;
+    std::vector<std::unique_ptr<Context>> contextStack;
+    std::vector<std::unique_ptr<Context>> poppedContextStack;
     int contextCounter;
 
 private:
@@ -21,11 +21,12 @@ private:
     ContextHandler(const ContextHandler &other) = delete;
 
 public:
-    Context &getContext();
+    std::unique_ptr<Context> &getContext();
 
 public:
     static ContextHandler &getInstance();
-    static void pushContext(SCOPE_TYPE scope_type);
+    static std::unique_ptr<Context> &getContext(SCOPE_TYPE scope);
+    static void pushContext(SCOPE_TYPE scope_type, Node *const &node);
     static void popContext();
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
@@ -36,7 +37,7 @@ public:
     static void printTable();
 
 private:
-    void pushContextImpl(SCOPE_TYPE scope_type);
+    void pushContextImpl(SCOPE_TYPE scope_type, Node *const &node);
     void popContextImpl();
     std::unique_ptr<SymbolInfo> &findSymbolImpl(const std::string &identifier);
     void printTableImpl();

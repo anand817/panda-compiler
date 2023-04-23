@@ -1,3 +1,6 @@
+#ifndef UTILS_SCOPE_TYPE_ENUM_H
+#define UTILS_SCOPE_TYPE_ENUM_H
+
 #include <iostream>
 
 enum class SCOPE_TYPE
@@ -9,3 +12,5 @@ enum class SCOPE_TYPE
 };
 
 std::ostream &operator<<(std::ostream &out, const SCOPE_TYPE &operation);
+
+#endif // UTILS_SCOPE_TYPE_ENUM_H

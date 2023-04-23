@@ -33,7 +33,7 @@ bool BlockNode::analyze()
 
 void BlockNode::run()
 {
-    ContextHandler::pushContext(SCOPE_TYPE::BLOCK_SCOPE);
+    ContextHandler::pushContext(SCOPE_TYPE::BLOCK_SCOPE, this);
     for (StatementNode *statement : statements)
     {
         statement->run();

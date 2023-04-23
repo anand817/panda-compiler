@@ -27,4 +27,6 @@ bool matchType(const valueType &value, typeInfo &type);
 
 std::string getTypeString(const typeInfo &type);
 
+std::ostream &operator<<(std::ostream &out, const valueType &operation);
+
 #endif // OBJECT_H other.print();

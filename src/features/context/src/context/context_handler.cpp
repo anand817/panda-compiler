@@ -1,6 +1,6 @@
 #include <context/context_handler.hpp>
 
-ContextHandler::ContextHandler() : contextCounter(0), contextStack({}), poppedContextStack({}) {}
+ContextHandler::ContextHandler() : contextCounter(0), contextStack(), poppedContextStack() {}
 
 ContextHandler &ContextHandler::getInstance()
 {
@@ -8,16 +8,16 @@ ContextHandler &ContextHandler::getInstance()
     return instance;
 }
 
-void ContextHandler::pushContextImpl(SCOPE_TYPE scope_type)
+void ContextHandler::pushContextImpl(SCOPE_TYPE scope_type, Node *const &node)
 {
-    contextStack.emplace_back(contextCounter, scope_type);
+    contextStack.emplace_back(std::make_unique<Context>(contextCounter, scope_type, node));
     contextCounter += 1;
 }
 
-void ContextHandler::pushContext(SCOPE_TYPE scope_type)
+void ContextHandler::pushContext(SCOPE_TYPE scope_type, Node *const &node)
 {
     ContextHandler &instance = getInstance();
-    instance.pushContextImpl(scope_type);
+    instance.pushContextImpl(scope_type, node);
 }
 
 void ContextHandler::popContextImpl()
@@ -45,9 +45,9 @@ std::unique_ptr<SymbolInfo> &ContextHandler::findSymbolImpl(const std::string &i
     // iterate in reverse direction to get the closest symbol reference
     for (auto it = contextStack.rbegin(); it != contextStack.rend(); it++)
     {
-        if (it->symbolTable.find(identifier) != it->symbolTable.end())
+        if ((*it)->symbolTable.find(identifier) != (*it)->symbolTable.end())
         {
-            return it->symbolTable[identifier];
+            return (*it)->symbolTable[identifier];
         }
     }
 
@@ -60,16 +60,30 @@ std::unique_ptr<SymbolInfo> &ContextHandler::findSymbol(const std::string &ident
     return instance.findSymbolImpl(identifier);
 }
 
-Context &ContextHandler::getContext()
+std::unique_ptr<Context> &ContextHandler::getContext(SCOPE_TYPE scope)
+{
+    static std::unique_ptr<Context> not_found(nullptr);
+    ContextHandler &instance = getInstance();
+    auto &contextStack = instance.contextStack;
+
+    for (auto it = contextStack.rbegin(); it != contextStack.rend(); it++)
+    {
+        if ((*it)->scope_type == scope)
+            return *it;
+    }
+    return not_found;
+}
+
+std::unique_ptr<Context> &ContextHandler::getContext()
 {
     return contextStack.back();
 }
 
 void ContextHandler::printTableImpl()
 {
-    for (auto context : poppedContextStack)
+    for (auto &context : poppedContextStack)
     {
-        context.print();
+        context->print();
     }
 }
 
@@ -81,19 +95,18 @@ void ContextHandler::printTable()
 
 void ContextHandler::addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
 {
-    Context &context = getInstance().getContext();
-    context.addSymbol(identifier, dataType, data);
+    std::unique_ptr<Context> &context = getInstance().getContext();
+    context->addSymbol(identifier, dataType, data);
 }
 
 void ContextHandler::addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode)
 {
-    Context &context = getInstance().getContext();
-    context.addSymbol(identifier, dataType, parameterList, functionBlockNode);
+    std::unique_ptr<Context> &context = getInstance().getContext();
+    context->addSymbol(identifier, dataType, parameterList, functionBlockNode);
 }
 
 void ContextHandler::updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
 {
-    Context &context = getInstance().getContext();
     std::unique_ptr<SymbolInfo> &symbolInfo = findSymbol(identifier);
     if (symbolInfo == nullptr)
     {
@@ -113,12 +126,12 @@ void ContextHandler::updateSymbol(const std::string &identifier, const typeInfo 
 
 void ContextHandler::addClass(const std::string &name, const classTypeInfo &info)
 {
-    Context &context = getInstance().getContext();
-    context.addClass(name, info);
+    std::unique_ptr<Context> &context = getInstance().getContext();
+    context->addClass(name, info);
 }
 
 void ContextHandler::addClass(const std::string &name, classTypeInfo &&info)
 {
-    Context &context = getInstance().getContext();
-    context.addClass(name, std::move(info));
+    std::unique_ptr<Context> &context = getInstance().getContext();
+    context->addClass(name, std::move(info));
 }

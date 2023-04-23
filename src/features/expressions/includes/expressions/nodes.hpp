@@ -113,6 +113,7 @@ class FunctionCallNode : public IdentifierExpressionNode
 {
 public:
     ArgumentList argumentList;
+    TypeNode typeNode;
 
     FunctionCallNode(const IdentifierNode &identifierNode, const ArgumentList &argumentList);
 
@@ -125,11 +126,32 @@ public:
     ExpressionNode *clone();
 
     std::vector<std::string> generateCode();
-    bool analyze();
-    void run();
-    void print(std::string prefix);
-    bool isLvalue();
-    void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+};
+
+class PrintNode : public FunctionCallNode
+{
+public:
+    PrintNode(const ArgumentList &argumentList);
+
+    PrintNode(const PrintNode &other);
+    PrintNode(PrintNode &&other);
+
+    PrintNode &operator=(const PrintNode &other);
+    PrintNode &operator=(PrintNode &&other);
+
+    ExpressionNode *clone();
+
+    std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
 };
 
 #endif // EXPRESSION_NODES_H

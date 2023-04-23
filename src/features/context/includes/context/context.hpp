@@ -14,16 +14,18 @@ class BlockNode;
 
 class Context
 {
+public:
     int id;
     SCOPE_TYPE scope_type;
+    Node *node; // do not delete node on object destruction
     std::map<std::string, std::unique_ptr<SymbolInfo>> symbolTable;
     std::map<std::string, std::unique_ptr<ClassInfo>> classTable;
 
 public:
     // constructors
-    Context(int id, SCOPE_TYPE type);
-    Context(int id, const SCOPE_TYPE &type, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable);
-    Context(int id, SCOPE_TYPE &&type, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable);
+    Context(int id, SCOPE_TYPE type, Node *const &node);
+    Context(int id, const SCOPE_TYPE &type, Node *const &node, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable);
+    Context(int id, SCOPE_TYPE &&type, Node *const &node, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable);
     Context(Context &&other);
     Context(const Context &other);
 

@@ -63,10 +63,7 @@ void BinaryExpressionNode::run()
     right_expression->run();
     overload add_overload{
         [this](int &a, int &b)
-        {
-            std::cout << a << " + " << b << std::endl;
-            valueNode.assignValue(a + b);
-        },
+        { valueNode.assignValue(a + b); },
         [this](float &a, float &b)
         { valueNode.assignValue(a + b); },
         [this](std::string &a, std::string &b)
@@ -266,7 +263,6 @@ void BinaryExpressionNode::run()
     switch (operation)
     {
     case BINARY_OPERATOR::ADD:
-        std::cout << "add operation" << std::endl;
         std::visit(add_overload, leftChildValueNode.value, rightChildValueNode.value);
         break;
     case BINARY_OPERATOR::SUBTRACT:

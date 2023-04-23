@@ -1,9 +1,10 @@
 #include <context/context.hpp>
 #include <iostream>
 
-Context::Context(int id, const SCOPE_TYPE &type, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable)
+Context::Context(int id, const SCOPE_TYPE &type, Node *const &node, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable)
     : id(id),
-      scope_type(type)
+      scope_type(type),
+      node(node)
 {
     for (const auto &p : symbolTable)
     {
@@ -11,25 +12,31 @@ Context::Context(int id, const SCOPE_TYPE &type, const std::map<std::string, std
     }
 }
 
-Context::Context(int id, SCOPE_TYPE &&type, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable)
+Context::Context(int id, SCOPE_TYPE &&type, Node *const &node, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable)
     : id(id),
       scope_type(std::move(type)),
-      symbolTable(std::move(symbolTable)) {}
+      symbolTable(std::move(symbolTable)),
+      node(node) {}
 
-Context::Context(int id, SCOPE_TYPE type)
+Context::Context(int id, SCOPE_TYPE type, Node *const &node)
     : id(id),
       scope_type(type),
-      symbolTable() {}
+      symbolTable(),
+      node(node) {}
 
 Context::Context(Context &&other)
     : id(other.id),
       symbolTable(std::move(other.symbolTable)),
-      scope_type(std::move(other.scope_type)) {}
+      scope_type(std::move(other.scope_type)),
+      node(std::move(other.node)) {}
 
 Context::Context(const Context &other)
     : id(other.id),
-      scope_type(other.scope_type)
+      scope_type(other.scope_type),
+      node(node)
 {
+    std::cout << "after copying" << std::endl;
+    node->print("");
     for (const auto &p : other.symbolTable)
     {
         this->symbolTable.emplace(p.first, p.second->clone());
@@ -43,6 +50,7 @@ Context &Context::operator=(Context &&other)
         id = other.id;
         symbolTable = std::move(other.symbolTable);
         scope_type = std::move(other.scope_type);
+        node = std::move(other.node);
     }
 
     return *this;
@@ -54,6 +62,7 @@ Context &Context::operator=(const Context &other)
     {
         id = other.id;
         scope_type = other.scope_type;
+        node = other.node;
         for (const auto &p : symbolTable)
         {
             this->symbolTable.emplace(p.first, p.second->clone());
@@ -91,7 +100,7 @@ void Context::addClass(const std::string &name, classTypeInfo &&info)
 
 void Context::print() const
 {
-    std::cout << "----------- " << id << " -----------" << std::endl;
+    std::cout << "----------- " << id << " ->" << scope_type << " -----------" << std::endl;
 
     for (auto &symbols : symbolTable)
     {

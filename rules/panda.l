@@ -49,6 +49,7 @@ LINE_COMMENT        "//"(.)*
 <INITIAL>"break"                    return BREAK;
 <INITIAL>"continue"                 return CONTINUE;
 <INITIAL>"return"                   return RETURN;
+<INITIAL>"print"                    return PRINT;
 
 <INITIAL>"++"                       return INC;
 <INITIAL>"--"                       return DEC;

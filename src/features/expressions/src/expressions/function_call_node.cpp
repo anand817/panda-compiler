@@ -3,15 +3,18 @@
 
 FunctionCallNode::FunctionCallNode(const IdentifierNode &identifierNode, const ArgumentList &argumentList)
     : IdentifierExpressionNode(identifierNode),
-      argumentList(argumentList) {}
+      argumentList(argumentList),
+      typeNode(VOID_TYPE) {}
 
 FunctionCallNode::FunctionCallNode(const FunctionCallNode &other)
     : IdentifierExpressionNode(other),
-      argumentList(other.argumentList) {}
+      argumentList(other.argumentList),
+      typeNode(VOID_TYPE) {}
 
 FunctionCallNode::FunctionCallNode(FunctionCallNode &&other)
     : IdentifierExpressionNode(std::move(other)),
-      argumentList(std::move(argumentList)) {}
+      argumentList(std::move(argumentList)),
+      typeNode(VOID_TYPE) {}
 
 FunctionCallNode &FunctionCallNode::operator=(const FunctionCallNode &other)
 {
@@ -19,6 +22,7 @@ FunctionCallNode &FunctionCallNode::operator=(const FunctionCallNode &other)
     {
         IdentifierExpressionNode::operator=(other);
         this->argumentList = argumentList;
+        this->typeNode = other.typeNode;
     }
 
     return *this;
@@ -30,6 +34,7 @@ FunctionCallNode &FunctionCallNode::operator=(FunctionCallNode &&other)
     {
         IdentifierExpressionNode::operator=(std::move(other));
         this->argumentList = std::move(other.argumentList);
+        this->typeNode = std::move(other.typeNode);
     }
 
     return *this;
@@ -64,11 +69,13 @@ void FunctionCallNode::run()
         throw identifierNode.name + " is not a function ( check if its a variable )";
     }
 
+    typeNode = TypeNode(info->dataType);
     if (!info->functionBlockNode)
     {
         throw "function definition not found";
     }
-    ContextHandler::pushContext(SCOPE_TYPE::FUNCTION_SCOPE);
+
+    ContextHandler::pushContext(SCOPE_TYPE::FUNCTION_SCOPE, this);
 
     if (argumentList.size() != info->parameters.size())
     {
@@ -95,6 +102,7 @@ void FunctionCallNode::print(std::string prefix)
     std::cout << prefix << "Function Call Node" << std::endl;
     prefix += "\t-> ";
     IdentifierExpressionNode::print(prefix);
+    typeNode.print(prefix);
     std::cout << prefix << "expressions: " << std::endl;
     for (auto expression : argumentList)
     {

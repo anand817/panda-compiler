@@ -1,7 +1,7 @@
-void abc(int a, int b){
-    a = 3;
-    a;
+int add(int a, int b){
+    return a + b;
 }
 
-int a = 5;
-a;
+int c = add(2,3);
+
+print("value of c:", c);

@@ -34,6 +34,8 @@
     VariableDefinitionNode*         variableDefinitionNode;
     FunctionDeclarationNode*        functionDeclarationNode;
     FunctionCallNode*               functionCallNode;
+    PrintNode*                      printNode;
+    ReturnStatementNode*            returnStatementNode;
     VariableList*                   variableList;
     ArgumentList*                   argumentList;
     ExpressionNode*                 expressionNode;
@@ -58,6 +60,7 @@
 %token <token> BREAK
 %token <token> CONTINUE
 %token <token> RETURN
+%token <token> PRINT
 
 // Operators
 %token <token> INC
@@ -88,7 +91,9 @@
 %type <variableDeclarationNode> variable_declaration
 %type <functionDeclarationNode> function_declaration function_header
 %type <functionCallNode>        function_call
+%type <printNode>               print
 %type <variableDefinitionNode>  variable_definition
+%type <returnStatementNode>     return_statement
 %type <typeNode>                type
 %type <identifierNode>          identifier
 %type <expressionNode>          expression
@@ -140,7 +145,12 @@ statement:              ';'                                    { $$ = new Statem
          |              variable_definition ';'                { $$ = $1; }
          |              function_declaration                   { $$ = $1; }
          |              expression ';'                         { $$ = $1; }
+         |              return_statement ';'                   { $$ = $1; }
          ;
+
+return_statement:       RETURN expression                      { $$ = new ReturnStatementNode($2); }
+                |       RETURN                                 { $$ = new ReturnStatementNode(); }
+                ;
 
 variable_declaration:   type identifier                        { $$ = new VariableDeclarationNode(*$1, *$2); delete $1; delete $2; }
                     ;
@@ -153,6 +163,8 @@ function_declaration:   function_header statement_block        { $$ = $1; $$->as
 
 function_call:          identifier '(' argument_list ')'       { $$ = new FunctionCallNode(*$1, *$3); delete $1; delete $3; }
              ;
+
+print:                  PRINT '(' argument_list ')'            { $$ = new PrintNode(*$3); delete $3; }
     
 param_list:             /* epsilon */                          { $$ = new VariableList(); }
           |             variable_list                          { $$ = $1; }
@@ -205,6 +217,7 @@ expression:             expression '+' expression              { $$ = new Binary
 
           |             '(' expression ')'                     { $$ = $2; }
           |             function_call                          { $$ = $1; }
+          |             print                                  { $$ = $1; }
           |             identifier                             { $$ = new IdentifierExpressionNode(*$1); delete $1; }
           |             value                                  { $$ = new ExpressionNode(*$1); delete $1; }
           ;

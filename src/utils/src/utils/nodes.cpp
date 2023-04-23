@@ -77,26 +77,26 @@ void ValueNode::assignType(const valueType &value)
     {
     case 0:
         type = INT_TYPE;
-        std::cout << "int assign for value " << std::get<int>(value);
+        // std::cout << "int assign for value " << std::get<int>(value);
         break;
     case 1:
         type = FLOAT_TYPE;
-        std::cout << "float assign for value " << std::get<float>(value);
+        // std::cout << "float assign for value " << std::get<float>(value);
         break;
     case 2:
         type = STRING_TYPE;
-        std::cout << "string assign for value " << std::get<std::string>(value);
+        // std::cout << "string assign for value " << std::get<std::string>(value);
         break;
     case 3:
         std::cout << "bool assign for value " << std::get<bool>(value);
-        type = BOOL_TYPE;
+        // type = BOOL_TYPE;
         break;
     case 4:
-        std::cout << "char assign for value " << std::get<char>(value);
+        // std::cout << "char assign for value " << std::get<char>(value);
         type = CHAR_TYPE;
         break;
     case 5:
-        std::cout << "class type assign for value ";
+        // std::cout << "class type assign for value ";
         type = classTypeInfo();
         break;
     default:
@@ -104,45 +104,16 @@ void ValueNode::assignType(const valueType &value)
         break;
     }
 
-    std::cout << std::endl;
+    // std::cout << std::endl;
 }
 
 void ValueNode::assignValue(const valueType &value)
 {
-    std::cout << "assign value called" << std::endl;
     this->value = value;
     assignType(value);
 }
 
 void ValueNode::print(std::string preifx)
 {
-    std::cout << preifx << "Value Node with type " << getTypeString(type) << " and value ";
-
-    // TODO: overload can be used
-    if (getTypeString(type) == INT_TYPE)
-    {
-        std::cout << std::get<int>(value);
-    }
-    else if (getTypeString(type) == BOOL_TYPE)
-    {
-        std::cout << std::get<bool>(value);
-    }
-    else if (getTypeString(type) == FLOAT_TYPE)
-    {
-        std::cout << std::get<float>(value);
-    }
-    else if (getTypeString(type) == CHAR_TYPE)
-    {
-        std::cout << std::get<char>(value);
-    }
-    else if (getTypeString(type) == STRING_TYPE)
-    {
-        std::cout << std::get<std::string>(value);
-    }
-    else
-    {
-        std::cout << "invalid type of data";
-    }
-
-    std::cout << std::endl;
+    std::cout << preifx << "Value Node with type " << getTypeString(type) << " and value " << value << std::endl;
 }
