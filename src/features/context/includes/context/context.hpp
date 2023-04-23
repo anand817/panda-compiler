@@ -25,8 +25,8 @@ public:
 public:
     // constructors
     Context(int id, SCOPE_TYPE type, Node *const &node);
-    Context(int id, const SCOPE_TYPE &type, Node *const &node, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable);
-    Context(int id, SCOPE_TYPE &&type, Node *const &node, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable);
+    Context(int id, const SCOPE_TYPE &type, Node *const &node, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable, const std::map<std::string, std::unique_ptr<ClassInfo>> &classTable);
+    Context(int id, SCOPE_TYPE &&type, Node *const &node, std::map<std::string, std::unique_ptr<SymbolInfo>> &&symbolTable, std::map<std::string, std::unique_ptr<ClassInfo>> &&classTable);
     Context(Context &&other);
     Context(const Context &other);
 
@@ -39,8 +39,10 @@ public:
     void addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
     void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
 
-    void addClass(const std::string &name, const classTypeInfo &info);
-    void addClass(const std::string &name, classTypeInfo &&info);
+    void addClass(const std::string &name, const ClassTypeInfo &info);
+    void addClass(const std::string &name, ClassTypeInfo &&info);
+
+    void printClassTable() const;
 
     void print() const;
 

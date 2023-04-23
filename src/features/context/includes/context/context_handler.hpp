@@ -32,8 +32,9 @@ public:
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
     static void updateSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
-    static void addClass(const std::string &name, const classTypeInfo &info);
-    static void addClass(const std::string &name, classTypeInfo &&info);
+    static void addClass(const std::string &name, const ClassTypeInfo &info);
+    static void addClass(const std::string &name, ClassTypeInfo &&info);
+    static void printClassTable();
     static std::unique_ptr<SymbolInfo> &findSymbol(const std::string &identifier);
     static void printTable();
 
@@ -42,6 +43,7 @@ private:
     void popContextImpl();
     std::unique_ptr<SymbolInfo> &findSymbolImpl(const std::string &identifier);
     void printTableImpl();
+    void printClassTableImpl();
 };
 
 #endif // CONTEXT_HANDLER_H

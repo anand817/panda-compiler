@@ -22,7 +22,7 @@ void VariableDefinitionNode::run()
                 throw("mismatched types " + variableType + " and " + expressionType);
             }
         },
-        [](classTypeInfo &variableType, classTypeInfo &expressionType)
+        [](ClassTypeInfo &variableType, ClassTypeInfo &expressionType)
         {
             if (variableType.className != expressionType.className)
             {

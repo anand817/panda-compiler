@@ -12,7 +12,7 @@ std::string getTypeString(const typeInfo &type)
     {
         return std::get<std::string>(type);
     }
-    return std::get<classTypeInfo>(type).className;
+    return std::get<ClassTypeInfo>(type).className;
 }
 
 std::ostream &operator<<(std::ostream &out, const valueType &value)

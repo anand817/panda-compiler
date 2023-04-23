@@ -14,7 +14,7 @@ void TypeNode::print(std::string prefix)
     }
     else
     {
-        std::cout << std::get<classTypeInfo>(type).className;
+        std::cout << std::get<ClassTypeInfo>(type).className;
     }
     std::cout << std::endl;
 }
@@ -81,34 +81,27 @@ void ValueNode::assignType(const valueType &value)
     {
     case 0:
         type = INT_TYPE;
-        // std::cout << "int assign for value " << std::get<int>(value);
         break;
     case 1:
         type = FLOAT_TYPE;
-        // std::cout << "float assign for value " << std::get<float>(value);
         break;
     case 2:
         type = STRING_TYPE;
-        // std::cout << "string assign for value " << std::get<std::string>(value);
         break;
     case 3:
-        // std::cout << "bool assign for value " << std::get<bool>(value);
         type = BOOL_TYPE;
         break;
     case 4:
-        // std::cout << "char assign for value " << std::get<char>(value);
         type = CHAR_TYPE;
         break;
     case 5:
-        // std::cout << "class type assign for value ";
-        type = classTypeInfo();
+        type = ClassTypeInfo(std::get<objectType>(value).className);
+        // find class from class table and then assign the value
         break;
     default:
         std::cout << "type is not assigned ";
         break;
     }
-
-    // std::cout << std::endl;
 }
 
 void ValueNode::assignValue(const valueType &value)

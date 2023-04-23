@@ -51,6 +51,7 @@ LINE_COMMENT        "//"(.)*
 <INITIAL>"return"                   return RETURN;
 <INITIAL>"print"                    return PRINT;
 <INITIAL>"input"                    return INPUT;
+<INITIAL>"class"                    return CLASS;
 
 <INITIAL>"++"                       return INC;
 <INITIAL>"--"                       return DEC;

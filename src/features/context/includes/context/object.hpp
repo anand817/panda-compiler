@@ -12,7 +12,8 @@ typedef std::variant<int, float, std::string, bool, char, objectType> valueType;
 
 struct objectType
 {
-    std::map<std::string, valueType> object;
+    std::string className;
+    std::map<std::string, valueType> parameters;
 };
 
 template <class... Ts>

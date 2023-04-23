@@ -95,6 +95,14 @@ void ContextHandler::printTable()
     instance.printTableImpl();
 }
 
+void ContextHandler::printClassTableImpl()
+{
+    for (auto &context : poppedContextStack)
+    {
+        context->printClassTable();
+    }
+}
+
 void ContextHandler::addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data)
 {
     std::unique_ptr<Context> &context = getInstance().getContext();
@@ -146,14 +154,20 @@ void ContextHandler::returnTillContext(SCOPE_TYPE scope)
     throw "no context found with specified type";
 }
 
-void ContextHandler::addClass(const std::string &name, const classTypeInfo &info)
+void ContextHandler::addClass(const std::string &name, const ClassTypeInfo &info)
 {
     std::unique_ptr<Context> &context = getInstance().getContext();
     context->addClass(name, info);
 }
 
-void ContextHandler::addClass(const std::string &name, classTypeInfo &&info)
+void ContextHandler::addClass(const std::string &name, ClassTypeInfo &&info)
 {
     std::unique_ptr<Context> &context = getInstance().getContext();
     context->addClass(name, std::move(info));
+}
+
+void ContextHandler::printClassTable()
+{
+    auto &instance = getInstance();
+    instance.printClassTableImpl();
 }

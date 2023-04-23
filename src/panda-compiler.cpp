@@ -86,10 +86,10 @@ int main(int argc, char *argv[])
         try
         {
 
-            // for (auto statement : *programmeRoot)
-            // {
-            //     statement->print("");
-            // }
+            for (auto statement : *programmeRoot)
+            {
+                statement->print("");
+            }
 
             ContextHandler::pushContext(SCOPE_TYPE::BLOCK_SCOPE, new BlockNode(*programmeRoot));
             for (auto statement : *programmeRoot)
@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
         // std::cout << "\n\n------------ Symbol table -----------------\n\n";
 
         // ContextHandler::printTable();
+        ContextHandler::printClassTable();
     }
 
     fclose(yyin);

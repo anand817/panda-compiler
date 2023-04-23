@@ -6,6 +6,7 @@
     #include <functions/nodes.hpp>
     #include <expressions/nodes.hpp>
     #include <conditionals/nodes.hpp>
+    #include <class/nodes.hpp>
     #include <loop/nodes.hpp>
     #include <utils/nodes.hpp>
     #include <enums/type_enum.hpp>
@@ -32,6 +33,7 @@
     TypeNode*                       typeNode;
     StatementList*                  statementList;
     StatementNode*                  statementNode;
+    ClassDefinitionNode*            classDefinitionNode;
     VariableDeclarationNode*        variableDeclarationNode;
     VariableDefinitionNode*         variableDefinitionNode;
     FunctionDeclarationNode*        functionDeclarationNode;
@@ -44,6 +46,7 @@
     WhileNode*                      whileNode;
     BreakNode*                      breakNode;
     ContinueNode*                   continueNode;
+    DeclarationList*                declarationList;
     VariableList*                   variableList;
     ArgumentList*                   argumentList;
     ExpressionNode*                 expressionNode;
@@ -70,6 +73,7 @@
 %token <token> RETURN
 %token <token> PRINT
 %token <token> INPUT
+%token <token> CLASS
 
 // Operators
 %token <token> INC
@@ -97,6 +101,8 @@
 %type <argumentList>            expression_list argument_list
 %type <statementNode>           statement for_init_statement
 %type <blockNode>               statement_block
+%type <classDefinitionNode>     class_definition
+%type <declarationList>         declaration_list
 %type <variableDeclarationNode> variable_declaration
 %type <functionDeclarationNode> function_declaration function_header
 %type <functionCallNode>        function_call
@@ -166,7 +172,16 @@ statement:              ';'                                                     
          |              return_statement ';'                                                    { $$ = $1; }
          |              break_statement ';'                                                     { $$ = $1; }
          |              continue_statement ';'                                                  { $$ = $1; }
+         |              class_definition ';'                                                    { $$ = $1; }
          ;
+
+declaration_list:       /* epsilon */                                                           { $$ = new DeclarationList(); }
+                |       declaration_list variable_declaration ';'                               { $$ = $1; $$->push_back($2); }
+                |       declaration_list function_declaration                                   { $$ = $1; $$->push_back($2); }
+                ;
+
+class_definition:       CLASS identifier '{' declaration_list '}'                               { $$ = new ClassDefinitionNode(*$2, *$4); delete $2; delete $4; }
+                ;
 
 if_statement:           unmatched_if_statement                                                  { $$ = $1; }
             |           matched_if_statement                                                    { $$ = $1; }
