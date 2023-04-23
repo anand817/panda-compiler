@@ -88,8 +88,8 @@ void ValueNode::assignType(const valueType &value)
         // std::cout << "string assign for value " << std::get<std::string>(value);
         break;
     case 3:
-        std::cout << "bool assign for value " << std::get<bool>(value);
-        // type = BOOL_TYPE;
+        // std::cout << "bool assign for value " << std::get<bool>(value);
+        type = BOOL_TYPE;
         break;
     case 4:
         // std::cout << "char assign for value " << std::get<char>(value);
