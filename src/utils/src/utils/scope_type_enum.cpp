@@ -7,6 +7,9 @@ std::ostream &operator<<(std::ostream &out, const SCOPE_TYPE &scope)
     case SCOPE_TYPE::LOOP_SCOPE:
         out << "loop scope";
         break;
+    case SCOPE_TYPE::LOOP_BLOCK_SCOPE:
+        out << "loop block scope";
+        break;
     case SCOPE_TYPE::FUNCTION_SCOPE:
         out << "function scope";
         break;

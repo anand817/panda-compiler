@@ -62,12 +62,12 @@ void IfNode::run()
     ContextHandler::pushContext(SCOPE_TYPE::BRANCH_SCOPE, this);
     if (std::get<bool>(conditional_expression->valueNode.value))
     {
-        ifBody->run();
+        ifBody->run(SCOPE_TYPE::BRANCH_SCOPE);
     }
     else
     {
         if (elseBody)
-            elseBody->run();
+            elseBody->run(SCOPE_TYPE::BRANCH_SCOPE);
     }
     ContextHandler::popContext();
 }

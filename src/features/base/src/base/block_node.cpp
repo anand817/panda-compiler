@@ -34,11 +34,30 @@ bool BlockNode::analyze()
 void BlockNode::run()
 {
     ContextHandler::pushContext(SCOPE_TYPE::BLOCK_SCOPE, this);
+    bool stop_processing = false;
     for (StatementNode *statement : statements)
     {
+        auto &context = ContextHandler::getContext(SCOPE_TYPE::BLOCK_SCOPE);
+        stop_processing = context->stop_processing;
+        if (stop_processing)
+            break;
         statement->run();
     }
     ContextHandler::popContext();
+}
+
+void BlockNode::run(SCOPE_TYPE scope)
+{
+    bool stop_processing = false;
+    for (StatementNode *statement : statements)
+    {
+        auto &context = ContextHandler::getContext(scope);
+        stop_processing = context->stop_processing;
+
+        if (stop_processing)
+            break;
+        statement->run();
+    }
 }
 
 void BlockNode::print(std::string prefix)

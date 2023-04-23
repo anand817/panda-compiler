@@ -56,8 +56,10 @@ bool ForNode::analyze()
 void ForNode::run()
 {
     ContextHandler::pushContext(SCOPE_TYPE::LOOP_SCOPE, this);
+    bool stop_processing = false;
     if (initialize_statement)
         initialize_statement->run();
+
     if (condition_expression)
     {
         condition_expression->run();
@@ -66,14 +68,21 @@ void ForNode::run()
             throw "conditional expression should be boolean";
         }
     }
+
     if (body == nullptr)
     {
         throw "body of for statement can't be null";
     }
 
-    while (condition_expression == nullptr || std::get<bool>(condition_expression->valueNode.value))
+    while ((condition_expression == nullptr || std::get<bool>(condition_expression->valueNode.value)))
     {
-        body->run();
+        auto &context = ContextHandler::getContext(SCOPE_TYPE::LOOP_SCOPE);
+        stop_processing = context->stop_processing;
+        if (stop_processing)
+            break;
+        ContextHandler::pushContext(SCOPE_TYPE::LOOP_BLOCK_SCOPE, this);
+        body->run(SCOPE_TYPE::LOOP_BLOCK_SCOPE);
+        ContextHandler::popContext();
         if (update_expression)
             update_expression->run();
         if (condition_expression)

@@ -8,16 +8,18 @@ ContextHandler &ContextHandler::getInstance()
     return instance;
 }
 
-void ContextHandler::pushContextImpl(SCOPE_TYPE scope_type, Node *const &node)
+std::unique_ptr<Context> &ContextHandler::pushContextImpl(SCOPE_TYPE scope_type, Node *const &node)
 {
-    contextStack.emplace_back(std::make_unique<Context>(contextCounter, scope_type, node));
+    std::unique_ptr<Context> &context = contextStack.emplace_back(std::make_unique<Context>(contextCounter, scope_type, node));
     contextCounter += 1;
+    return context;
 }
 
-void ContextHandler::pushContext(SCOPE_TYPE scope_type, Node *const &node)
+std::unique_ptr<Context> &ContextHandler::pushContext(SCOPE_TYPE scope_type, Node *const &node)
 {
     ContextHandler &instance = getInstance();
-    instance.pushContextImpl(scope_type, node);
+    auto &context = instance.pushContextImpl(scope_type, node);
+    return context;
 }
 
 void ContextHandler::popContextImpl()
@@ -122,6 +124,26 @@ void ContextHandler::updateSymbol(const std::string &identifier, const typeInfo 
         throw identifier + " is not a variable ( check if its a function )";
     }
     variableInfo->valueContainer = data;
+}
+
+void ContextHandler::returnTillContext(SCOPE_TYPE scope)
+{
+    ContextHandler &instance = getInstance();
+    auto &contextStack = instance.contextStack;
+
+    for (auto it = contextStack.rbegin(); it != contextStack.rend(); it++)
+    {
+        if ((*it)->scope_type == scope)
+        {
+            for (auto iter = it.base() - 1; iter != contextStack.end(); iter++)
+            {
+                (*iter)->stop_processing = true;
+            }
+            return;
+        }
+    }
+
+    throw "no context found with specified type";
 }
 
 void ContextHandler::addClass(const std::string &name, const classTypeInfo &info)

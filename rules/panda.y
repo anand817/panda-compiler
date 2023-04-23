@@ -42,6 +42,8 @@
     IfNode*                         ifNode;
     ForNode*                        forNode;
     WhileNode*                      whileNode;
+    BreakNode*                      breakNode;
+    ContinueNode*                   continueNode;
     VariableList*                   variableList;
     ArgumentList*                   argumentList;
     ExpressionNode*                 expressionNode;
@@ -58,7 +60,7 @@
 %token <token> TYPE_STRING
 
 // Keywords
-%token <token> CONST
+/* %token <token> CONST */
 %token <token> IF
 %token <token> ELSE
 %token <token> FOR
@@ -102,6 +104,8 @@
 %type <inputNode>               input
 %type <variableDefinitionNode>  variable_definition
 %type <returnStatementNode>     return_statement
+%type <breakNode>               break_statement
+%type <continueNode>            continue_statement
 %type <ifNode>                  if_statement unmatched_if_statement matched_if_statement
 %type <forNode>                 for_header for_statement
 %type <whileNode>               while_statement
@@ -160,6 +164,8 @@ statement:              ';'                                                     
          |              while_statement                                                         { $$ = $1; }
          |              expression ';'                                                          { $$ = $1; }
          |              return_statement ';'                                                    { $$ = $1; }
+         |              break_statement ';'                                                     { $$ = $1; }
+         |              continue_statement ';'                                                  { $$ = $1; }
          ;
 
 if_statement:           unmatched_if_statement                                                  { $$ = $1; }
@@ -194,6 +200,12 @@ for_expression:         /* epsilon */                                           
 return_statement:       RETURN expression                                                       { $$ = new ReturnStatementNode($2); }
                 |       RETURN                                                                  { $$ = new ReturnStatementNode(); }
                 ;
+
+break_statement:        BREAK                                                                   { $$ = new BreakNode(); }
+               ;
+
+continue_statement:     CONTINUE                                                                { $$ = new ContinueNode(); }
+                  ;
 
 variable_declaration:   type identifier                                                         { $$ = new VariableDeclarationNode(*$1, *$2); delete $1; delete $2; }
                     ;

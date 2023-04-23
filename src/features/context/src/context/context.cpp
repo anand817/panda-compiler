@@ -4,7 +4,8 @@
 Context::Context(int id, const SCOPE_TYPE &type, Node *const &node, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable)
     : id(id),
       scope_type(type),
-      node(node)
+      node(node),
+      stop_processing(false)
 {
     for (const auto &p : symbolTable)
     {
@@ -16,24 +17,28 @@ Context::Context(int id, SCOPE_TYPE &&type, Node *const &node, std::map<std::str
     : id(id),
       scope_type(std::move(type)),
       symbolTable(std::move(symbolTable)),
+      stop_processing(std::move(stop_processing)),
       node(node) {}
 
 Context::Context(int id, SCOPE_TYPE type, Node *const &node)
     : id(id),
       scope_type(type),
       symbolTable(),
+      stop_processing(false),
       node(node) {}
 
 Context::Context(Context &&other)
     : id(other.id),
       symbolTable(std::move(other.symbolTable)),
       scope_type(std::move(other.scope_type)),
+      stop_processing(std::move(other.stop_processing)),
       node(std::move(other.node)) {}
 
 Context::Context(const Context &other)
     : id(other.id),
       scope_type(other.scope_type),
-      node(node)
+      node(other.node),
+      stop_processing(std::move(other.stop_processing))
 {
     std::cout << "after copying" << std::endl;
     node->print("");
@@ -51,6 +56,7 @@ Context &Context::operator=(Context &&other)
         symbolTable = std::move(other.symbolTable);
         scope_type = std::move(other.scope_type);
         node = std::move(other.node);
+        stop_processing = std::move(other.stop_processing);
     }
 
     return *this;
@@ -63,6 +69,7 @@ Context &Context::operator=(const Context &other)
         id = other.id;
         scope_type = other.scope_type;
         node = other.node;
+        stop_processing = other.stop_processing;
         for (const auto &p : symbolTable)
         {
             this->symbolTable.emplace(p.first, p.second->clone());

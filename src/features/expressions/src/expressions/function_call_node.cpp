@@ -75,7 +75,7 @@ void FunctionCallNode::run()
         throw "function definition not found";
     }
 
-    ContextHandler::pushContext(SCOPE_TYPE::FUNCTION_SCOPE, this);
+    auto &context = ContextHandler::pushContext(SCOPE_TYPE::FUNCTION_SCOPE, this);
 
     if (argumentList.size() != info->parameters.size())
     {
@@ -91,8 +91,7 @@ void FunctionCallNode::run()
         }
         ContextHandler::addSymbol(info->parameters[i].first, info->parameters[i].second, argumentList[i]->valueNode.value);
     }
-
-    info->functionBlockNode->run();
+    info->functionBlockNode->run(SCOPE_TYPE::FUNCTION_SCOPE);
     ContextHandler::popContext();
     // this->valueNode = info->
 }

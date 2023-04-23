@@ -17,6 +17,7 @@ class Context
 public:
     int id;
     SCOPE_TYPE scope_type;
+    bool stop_processing;
     Node *node; // do not delete node on object destruction
     std::map<std::string, std::unique_ptr<SymbolInfo>> symbolTable;
     std::map<std::string, std::unique_ptr<ClassInfo>> classTable;

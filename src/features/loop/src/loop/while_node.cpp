@@ -46,7 +46,7 @@ bool WhileNode::analyze()
 
 void WhileNode::run()
 {
-    ContextHandler::pushContext(SCOPE_TYPE::LOOP_SCOPE, this);
+    auto &context = ContextHandler::pushContext(SCOPE_TYPE::LOOP_SCOPE, this);
     if (condition_expression == nullptr)
         throw " condition in while loop can't be null";
 
@@ -60,9 +60,11 @@ void WhileNode::run()
         throw "body of for statement can't be null";
     }
 
-    while (condition_expression == nullptr || std::get<bool>(condition_expression->valueNode.value))
+    while ((condition_expression == nullptr || std::get<bool>(condition_expression->valueNode.value)) && !(context->stop_processing))
     {
-        body->run();
+        ContextHandler::pushContext(SCOPE_TYPE::LOOP_BLOCK_SCOPE, this);
+        body->run(SCOPE_TYPE::LOOP_BLOCK_SCOPE);
+        ContextHandler::popContext();
         if (condition_expression)
             condition_expression->run();
     }

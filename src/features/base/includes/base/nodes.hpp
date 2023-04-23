@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <utils/nodes.hpp>
+#include <enums/scope_type_enum.hpp>
 
 class ExpressionNode;
 
@@ -40,6 +41,7 @@ public:
     virtual std::vector<std::string> generateCode();
     virtual bool analyze();
     virtual void run();
+    void run(SCOPE_TYPE scope); // do not create its own scope.. instead find the scope provided
     virtual void print(std::string prefix);
 
     virtual ~BlockNode();

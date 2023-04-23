@@ -31,6 +31,7 @@ void ReturnStatementNode::run()
     {
         throw "only function call is allowed to create a function scope";
     }
+
     if (expressionNode)
     {
         if (getTypeString(function->typeNode.type) != getTypeString(expressionNode->valueNode.type))
@@ -47,6 +48,8 @@ void ReturnStatementNode::run()
         }
         function->valueNode.type = VOID_TYPE;
     }
+
+    ContextHandler::returnTillContext(SCOPE_TYPE::FUNCTION_SCOPE);
 }
 
 void ReturnStatementNode::print(std::string prefix)

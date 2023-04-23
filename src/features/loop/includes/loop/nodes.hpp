@@ -48,4 +48,38 @@ public:
     void assignBody(BlockNode *const &body);
 };
 
+class BreakNode : public StatementNode
+{
+public:
+    BreakNode();
+
+    BreakNode(const BreakNode &other);
+    BreakNode(BreakNode &&other);
+
+    BreakNode &operator=(const BreakNode &other);
+    BreakNode &operator=(BreakNode &&other);
+
+    std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+};
+
+class ContinueNode : public StatementNode
+{
+public:
+    ContinueNode();
+
+    ContinueNode(const ContinueNode &other);
+    ContinueNode(ContinueNode &&other);
+
+    ContinueNode &operator=(const ContinueNode &other);
+    ContinueNode &operator=(ContinueNode &&other);
+
+    std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+};
+
 #endif // LOOP_NODES_H

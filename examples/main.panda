@@ -1,5 +1,11 @@
-int a = 2;
-while(a <= 3){
-    print(a);
-    a++;
+int main(){
+    for(int a = 3; a <= 8; a++){
+        if(a >= 5){
+            return a;
+        }
+        print(a);
+    }
 }
+
+int p = main();
+print("value of p: ",p);
