@@ -207,4 +207,28 @@ public:
     virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
+class ObjectFunctionCallNode : public FunctionCallNode
+{
+public:
+    IdentifierNode objectIdentifierNode;
+
+    ObjectFunctionCallNode(const IdentifierNode &objectIdentifierNode, const IdentifierNode &functionParameterIdentifierNode, const ArgumentList &argumentList);
+
+    ObjectFunctionCallNode(const ObjectFunctionCallNode &other);
+    ObjectFunctionCallNode(const ObjectFunctionCallNode &&other);
+
+    ObjectFunctionCallNode &operator=(const ObjectFunctionCallNode &other);
+    ObjectFunctionCallNode &operator=(ObjectFunctionCallNode &&other);
+
+    ExpressionNode *clone();
+
+    std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
+};
+
 #endif // EXPRESSION_NODES_H

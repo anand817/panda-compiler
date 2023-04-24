@@ -1,10 +1,39 @@
-class abc{
-    int a;
-    int b;
+class User{
+    int balance;
+    string name;
+    void getUserInfo(){
+        print(name,"has balance: ",balance);
+    }
+
+    void deposit(int amount){
+        balance=balance+amount;
+        print("Successfully deposited",amount,"in the account");
+    }
+
+    bool withdraw(int amount){
+        if(balance>=amount){
+            balance=balance-amount;
+            print("Withdrawn Successfully");
+            return true;
+        }else{
+            print("Insufficient Balance.");
+            return false;
+        }
+    }
 };
 
-abc a;
-print(a);
-a.a = 2;
-a.b = 3;
-print(a);
+User anand;
+anand.name = "Anand Kumar";
+anand.balance = 2000;
+
+anand.getUserInfo();
+anand.deposit(100);
+anand.getUserInfo();
+
+if(anand.withdraw(3000)){
+    print("Transaction Successfully Done.");
+}else{
+    print("Transaction Failed.");
+}
+anand.getUserInfo();
+

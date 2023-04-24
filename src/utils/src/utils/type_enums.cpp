@@ -1,9 +1,9 @@
 #include <enums/type_enum.hpp>
+#include <iostream>
 
 valueType getDefaultValue(const std::string type)
 {
     valueType value;
-    // std::cout << type << " " << INT_TYPE << " " << (type == INT_TYPE) << std::endl;
     if (type == INT_TYPE)
     {
         return value = 0;
@@ -22,7 +22,7 @@ valueType getDefaultValue(const std::string type)
     }
     else if (type == STRING_TYPE)
     {
-        return value = "";
+        return value = std::string("");
     }
     throw("no default value got type " + type);
 }

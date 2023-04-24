@@ -7,6 +7,7 @@ target_sources(panda-compiler PRIVATE
     src/expressions/print_node.cpp
     src/expressions/input_node.cpp
     src/expressions/object_variable_node.cpp
+    src/expressions/object_function_call.cpp
 )
 
 target_include_directories(panda-compiler PRIVATE includes/)

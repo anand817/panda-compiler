@@ -66,6 +66,7 @@ void ObjectVariableNode::run()
         throw "identifier " + parameterIdentifier.name + " is not a parameter in the object";
     }
     this->valueNode.assignValue(objectInfo->parameters[parameterIdentifier.name]);
+    std::cout << "object type for parameter: " << parameterIdentifier.name << " " << objectInfo->parameters[parameterIdentifier.name] << std::endl;
     // assigns both type and value
 }
 
@@ -84,6 +85,7 @@ bool ObjectVariableNode::isLvalue()
 
 void ObjectVariableNode::updateSymbol(const typeInfo &dataType, const valueType &data)
 {
+    std::cout << "assigning value of data type: " << getTypeString(dataType) << std::endl;
     ContextHandler::updateObject(objectIdentifier.name, parameterIdentifier.name, this->valueNode.type, dataType, data);
 }
 
