@@ -95,7 +95,7 @@ void ValueNode::assignType(const valueType &value)
         type = CHAR_TYPE;
         break;
     case 5:
-        type = ClassTypeInfo(std::get<objectType>(value).className);
+        type = ClassTypeInfo(std::get<std::shared_ptr<objectType>>(value)->className);
         // find class from class table and then assign the value
         break;
     default:

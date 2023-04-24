@@ -8,13 +8,25 @@
 
 struct objectType;
 
-typedef std::variant<int, float, std::string, bool, char, objectType> valueType;
+typedef std::variant<int, float, std::string, bool, char, std::shared_ptr<objectType>> valueType;
 
 struct objectType
 {
     std::string className;
     std::map<std::string, valueType> parameters;
+
+    objectType();
+    objectType(const std::string &className, const std::map<std::string, valueType> parameters);
+    objectType(const objectType &other);
+    objectType(objectType &&other);
+
+    objectType &operator=(const objectType &other);
+    objectType &operator=(objectType &&other);
+
+    friend std::ostream &operator<<(std::ostream &out, objectType &a);
 };
+
+std::ostream &operator<<(std::ostream &out, objectType &a);
 
 template <class... Ts>
 struct overload : Ts...

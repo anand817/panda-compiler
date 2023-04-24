@@ -34,4 +34,14 @@ public:
     ~VariableDefinitionNode();
 };
 
+class ObjectDeclarationNode : public DeclarationNode
+{
+public:
+    ObjectDeclarationNode(const std::string &typeName, const IdentifierNode &identifier);
+
+    virtual std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+};
 #endif // VARIABLE_NODES_H

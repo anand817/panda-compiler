@@ -11,3 +11,6 @@ class abc{
         return a;
     }
 };
+
+abc a;
+print(a);

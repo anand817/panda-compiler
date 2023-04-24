@@ -28,6 +28,7 @@ public:
     static std::unique_ptr<Context> &getContext(SCOPE_TYPE scope);
     static void returnTillContext(SCOPE_TYPE scope);
     static std::unique_ptr<Context> &pushContext(SCOPE_TYPE scope_type, Node *const &node);
+    static std::unique_ptr<ClassInfo> &findClass(const std::string &name);
     static void popContext();
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const valueType &data);
     static void addSymbol(const std::string &identifier, const typeInfo &dataType, const std::vector<std::pair<std::string, typeInfo>> &parameterList, BlockNode *const &functionBlockNode);
@@ -42,6 +43,7 @@ private:
     std::unique_ptr<Context> &pushContextImpl(SCOPE_TYPE scope_type, Node *const &node);
     void popContextImpl();
     std::unique_ptr<SymbolInfo> &findSymbolImpl(const std::string &identifier);
+    std::unique_ptr<ClassInfo> &findClassImpl(const std::string &name);
     void printTableImpl();
     void printClassTableImpl();
 };

@@ -34,6 +34,7 @@
     StatementList*                  statementList;
     StatementNode*                  statementNode;
     ClassDefinitionNode*            classDefinitionNode;
+    ObjectDeclarationNode*          objectDeclarationNode;
     VariableDeclarationNode*        variableDeclarationNode;
     VariableDefinitionNode*         variableDefinitionNode;
     FunctionDeclarationNode*        functionDeclarationNode;
@@ -102,6 +103,7 @@
 %type <statementNode>           statement for_init_statement
 %type <blockNode>               statement_block
 %type <classDefinitionNode>     class_definition
+%type <objectDeclarationNode>   object_declaration
 %type <declarationList>         declaration_list
 %type <variableDeclarationNode> variable_declaration
 %type <functionDeclarationNode> function_declaration function_header
@@ -165,6 +167,7 @@ statement:              ';'                                                     
          |              variable_declaration ';'                                                { $$ = $1; }
          |              variable_definition ';'                                                 { $$ = $1; }
          |              function_declaration                                                    { $$ = $1; }
+         |              object_declaration ';'                                                  { $$ = $1; }
          |              if_statement                                                            { $$ = $1; }
          |              for_statement                                                           { $$ = $1; }
          |              while_statement                                                         { $$ = $1; }
@@ -182,6 +185,9 @@ declaration_list:       /* epsilon */                                           
 
 class_definition:       CLASS identifier '{' declaration_list '}'                               { $$ = new ClassDefinitionNode(*$2, *$4); delete $2; delete $4; }
                 ;
+
+object_declaration:     identifier identifier                                                   { $$ = new ObjectDeclarationNode($1->name, *$2); delete $1; delete $2; }
+                  ;
 
 if_statement:           unmatched_if_statement                                                  { $$ = $1; }
             |           matched_if_statement                                                    { $$ = $1; }
@@ -204,7 +210,7 @@ for_header:             FOR '(' for_init_statement ';' for_expression ';' for_ex
           ;
 
 for_init_statement:     /* epsilon */                                                           { $$ = NULL; }
-                  |     variable_definition                                                    { $$ = $1; }
+                  |     variable_definition                                                     { $$ = $1; }
                   |     expression                                                              { $$ = $1; }
                   ;
 

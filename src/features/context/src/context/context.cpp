@@ -1,4 +1,5 @@
 #include <context/context.hpp>
+#include <context/object.hpp>
 #include <iostream>
 
 Context::Context(int id, const SCOPE_TYPE &type, Node *const &node, const std::map<std::string, std::unique_ptr<SymbolInfo>> &symbolTable, const std::map<std::string, std::unique_ptr<ClassInfo>> &classTable)
@@ -96,7 +97,7 @@ void Context::addSymbol(const std::string &identifier, const typeInfo &dataType,
 {
     if (symbolTable.find(identifier) == symbolTable.end())
     {
-        symbolTable.emplace(identifier, std::make_unique<VariableInfo>(dataType, data));
+        symbolTable.emplace(identifier, std::make_unique<VariableInfo>(std::move(dataType), data));
     }
     else
     {

@@ -81,6 +81,28 @@ std::unique_ptr<Context> &ContextHandler::getContext()
     return contextStack.back();
 }
 
+std::unique_ptr<ClassInfo> &ContextHandler::findClassImpl(const std::string &name)
+{
+    static std::unique_ptr<ClassInfo> not_found;
+
+    // iterate in reverse direction to get the closest symbol reference
+    for (auto it = contextStack.rbegin(); it != contextStack.rend(); it++)
+    {
+        if ((*it)->classTable.find(name) != (*it)->classTable.end())
+        {
+            return (*it)->classTable[name];
+        }
+    }
+
+    return not_found;
+}
+
+std::unique_ptr<ClassInfo> &ContextHandler::findClass(const std::string &name)
+{
+    ContextHandler &instance = getInstance();
+    return instance.findClassImpl(name);
+}
+
 void ContextHandler::printTableImpl()
 {
     for (auto &context : poppedContextStack)
