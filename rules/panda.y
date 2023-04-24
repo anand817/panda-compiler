@@ -35,6 +35,7 @@
     StatementNode*                  statementNode;
     ClassDefinitionNode*            classDefinitionNode;
     ObjectDeclarationNode*          objectDeclarationNode;
+    ObjectVariableNode*             objectVariableNode;
     VariableDeclarationNode*        variableDeclarationNode;
     VariableDefinitionNode*         variableDefinitionNode;
     FunctionDeclarationNode*        functionDeclarationNode;
@@ -104,6 +105,7 @@
 %type <blockNode>               statement_block
 %type <classDefinitionNode>     class_definition
 %type <objectDeclarationNode>   object_declaration
+%type <objectVariableNode>      object_variable
 %type <declarationList>         declaration_list
 %type <variableDeclarationNode> variable_declaration
 %type <functionDeclarationNode> function_declaration function_header
@@ -121,7 +123,7 @@
 %type <identifierNode>          identifier
 %type <expressionNode>          expression for_expression
 %type <valueNode>               value
-%type <token>                   '-' '+' '*' '/' '%' '&' '|' '^' '~' '!' '<' '>' '=' '(' ')' '{' '}' '[' ']' ',' ':' ';'
+%type <token>                   '-' '+' '*' '/' '%' '&' '|' '^' '~' '!' '<' '>' '=' '(' ')' '{' '}' '[' ']' ',' ':' ';' '.'
 
 
 // associativity
@@ -188,6 +190,9 @@ class_definition:       CLASS identifier '{' declaration_list '}'               
 
 object_declaration:     identifier identifier                                                   { $$ = new ObjectDeclarationNode($1->name, *$2); delete $1; delete $2; }
                   ;
+
+object_variable:        identifier '.' identifier                                               { $$ = new ObjectVariableNode(*$1, *$3); delete $1; delete $3; }
+               ;
 
 if_statement:           unmatched_if_statement                                                  { $$ = $1; }
             |           matched_if_statement                                                    { $$ = $1; }
@@ -296,6 +301,7 @@ expression:             expression '+' expression                               
           |             function_call                                                           { $$ = $1; }
           |             print                                                                   { $$ = $1; }
           |             input                                                                   { $$ = $1; }
+          |             object_variable                                                         { $$ = $1; }
           |             identifier                                                              { $$ = new IdentifierExpressionNode(*$1); delete $1; }
           |             value                                                                   { $$ = new ExpressionNode(*$1); delete $1; }
           ;

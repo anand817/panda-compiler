@@ -183,4 +183,28 @@ public:
     virtual std::unique_ptr<SymbolInfo> &getSymbol();
 };
 
+class ObjectVariableNode : public ExpressionNode
+{
+public:
+    IdentifierNode objectIdentifier, parameterIdentifier;
+
+    ObjectVariableNode(const IdentifierNode &objectIdentifier, const IdentifierNode &parameterIdentifier);
+
+    ObjectVariableNode(const ObjectVariableNode &other);
+    ObjectVariableNode(ObjectVariableNode &&other);
+
+    ObjectVariableNode &operator=(const ObjectVariableNode &other);
+    ObjectVariableNode &operator=(ObjectVariableNode &&other);
+
+    ExpressionNode *clone();
+
+    std::vector<std::string> generateCode();
+    virtual bool analyze();
+    virtual void run();
+    virtual void print(std::string prefix);
+    virtual bool isLvalue();
+    virtual void updateSymbol(const typeInfo &dataType, const valueType &data);
+    virtual std::unique_ptr<SymbolInfo> &getSymbol();
+};
+
 #endif // EXPRESSION_NODES_H

@@ -61,7 +61,7 @@ LINE_COMMENT        "//"(.)*
 <INITIAL>"<="                       return LESS_EQUAL;
 <INITIAL>"&&"                       return LOGICAL_AND;
 <INITIAL>"||"                       return LOGICAL_OR;
-<INITIAL>[-+*/%&|^~!<>=(){}[\],:;]  return yytext[0];
+<INITIAL>[-+*/%&|^~!<>=(){}[\],:;.]  return yytext[0];
 
 
 <INITIAL>{INTEGER}                  saveToken(); return INTEGER;

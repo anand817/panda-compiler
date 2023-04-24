@@ -1,16 +1,10 @@
 class abc{
     int a;
     int b;
-
-    int alpha(){
-        return 0;
-    }
-
-    int beta(int a){
-        print(a);
-        return a;
-    }
 };
 
 abc a;
+print(a);
+a.a = 2;
+a.b = 3;
 print(a);

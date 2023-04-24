@@ -156,6 +156,32 @@ void ContextHandler::updateSymbol(const std::string &identifier, const typeInfo 
     variableInfo->valueContainer = data;
 }
 
+void ContextHandler::updateObject(const std::string &objectIdentifier, const std::string &parameterIdentifier, const typeInfo &objectDataType, const typeInfo &dataType, const valueType &data)
+{
+    auto &symbolInfo = findSymbol(objectIdentifier);
+    if (symbolInfo == nullptr)
+    {
+        throw "undefiend object " + objectIdentifier;
+    }
+    VariableInfo *variableInfo = dynamic_cast<VariableInfo *>(symbolInfo.get());
+    if (variableInfo == nullptr || !(std::holds_alternative<std::shared_ptr<objectType>>(variableInfo->valueContainer)))
+    {
+        throw "identifier " + objectIdentifier + " is not an object";
+    }
+    std::shared_ptr<objectType> &objectInfo = std::get<std::shared_ptr<objectType>>(variableInfo->valueContainer);
+    if (objectInfo->parameters.find(parameterIdentifier) == objectInfo->parameters.end())
+    {
+        throw "identifier " + parameterIdentifier + " is not a parameter in the object";
+    }
+
+    if (getTypeString(objectDataType) != getTypeString(dataType))
+    {
+        throw "unmatching type of variable " + parameterIdentifier + " while assigning";
+    }
+
+    objectInfo->parameters[parameterIdentifier] = data;
+}
+
 void ContextHandler::returnTillContext(SCOPE_TYPE scope)
 {
     ContextHandler &instance = getInstance();

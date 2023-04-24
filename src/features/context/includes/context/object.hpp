@@ -13,10 +13,11 @@ typedef std::variant<int, float, std::string, bool, char, std::shared_ptr<object
 struct objectType
 {
     std::string className;
+    ClassTypeInfo info;
     std::map<std::string, valueType> parameters;
 
     objectType();
-    objectType(const std::string &className, const std::map<std::string, valueType> parameters);
+    objectType(const std::string &className, const std::map<std::string, valueType> parameters, const ClassTypeInfo &info);
     objectType(const objectType &other);
     objectType(objectType &&other);
 
@@ -36,7 +37,7 @@ struct overload : Ts...
 template <class... Ts>
 overload(Ts...) -> overload<Ts...>;
 
-bool matchType(const valueType &value, typeInfo &type);
+// typeInfo getType(const valueType &value);
 
 std::string getTypeString(const typeInfo &type);
 

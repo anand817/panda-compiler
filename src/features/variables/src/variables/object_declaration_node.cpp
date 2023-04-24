@@ -24,6 +24,7 @@ void ObjectDeclarationNode::run()
     typeNode.type = classInfo->info;
     objectType value;
     value.className = className;
+    value.info = classInfo->info;
     // assign default values to the object
     for (auto &p : classInfo->info.propertyInfo)
     {

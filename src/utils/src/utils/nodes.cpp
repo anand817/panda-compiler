@@ -1,4 +1,5 @@
 #include <utils/nodes.hpp>
+#include <context/context_handler.hpp>
 
 // all constructor definitions
 
@@ -77,6 +78,20 @@ ValueNode::ValueNode(const ValueNode &other)
 
 void ValueNode::assignType(const valueType &value)
 {
+    // overload type_overload1{
+    //     [this](int &a)
+    //     { this->type = INT_TYPE; },
+    //     [this](float &a)
+    //     { this->type = FLOAT_TYPE; },
+    //     [this](std::string &a)
+    //     { this->type = STRING_TYPE; },
+    //     [this](bool &a)
+    //     { this->type = BOOL_TYPE; },
+    //     [this](char &a)
+    //     { this->type = CHAR_TYPE; },
+    //     [this, &value](std::shared_ptr<objectType> &a)
+    //     { this->type = std::get<std::shared_ptr<objectType>>(value)->info; }};
+
     switch (value.index())
     {
     case 0:
@@ -95,13 +110,15 @@ void ValueNode::assignType(const valueType &value)
         type = CHAR_TYPE;
         break;
     case 5:
-        type = ClassTypeInfo(std::get<std::shared_ptr<objectType>>(value)->className);
+        type = std::get<std::shared_ptr<objectType>>(value)->info;
         // find class from class table and then assign the value
         break;
     default:
         std::cout << "type is not assigned ";
         break;
     }
+
+    // std::visit(type_overload1, value);
 }
 
 void ValueNode::assignValue(const valueType &value)
