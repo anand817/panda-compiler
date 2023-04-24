@@ -1,0 +1,54 @@
+class Calculator{
+    float a;
+    float b;
+
+    float add(){
+        returnBack a+b;
+    }
+
+    float mul(){
+        returnBack a*b;
+    }
+
+    float div(){
+        whether(b==0){
+            display("Division by zero not possible");
+            returnBack -1.0;
+            display("-1 below");
+        }
+        display("a/b calc");
+        returnBack a/b;
+    }
+
+    float sub(){
+        returnBack a-b;
+    }
+};
+
+Calculator c;
+display(c);
+bool takeInput = true;
+until(takeInput){
+    float a;
+    float b;
+
+    display("Enter a and b: ");
+    input(a,b);
+    c.a = a;
+    c.b = b;
+    display("Add: ",c.add());
+    display("Sub: ",c.sub());
+    display("Mul: ",c.mul());
+    display("Div: ",c.div());
+
+    string yes;
+    display("Enter yes for new input otherwise no: ");
+    input(yes);
+
+    whether(yes!="yes"){
+        takeInput = false;
+    }
+}
+
+display("Ended Successfully");
+

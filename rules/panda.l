@@ -42,14 +42,14 @@ LINE_COMMENT        "//"(.)*
 <INITIAL>"void"                     return TYPE_VOID;
 <INITIAL>"string"                   return TYPE_STRING;
 
-<INITIAL>"if"                       return IF;
-<INITIAL>"else"                     return ELSE;
-<INITIAL>"for"                      return FOR;
-<INITIAL>"while"                    return WHILE;
-<INITIAL>"break"                    return BREAK;
-<INITIAL>"continue"                 return CONTINUE;
-<INITIAL>"return"                   return RETURN;
-<INITIAL>"print"                    return PRINT;
+<INITIAL>"whether"                       return IF;
+<INITIAL>"otherwise"                     return ELSE;
+<INITIAL>"as"                      return FOR;
+<INITIAL>"until"                    return WHILE;
+<INITIAL>"leave"                    return BREAK;
+<INITIAL>"skip"                 return CONTINUE;
+<INITIAL>"returnBack"                   return RETURN;
+<INITIAL>"display"                    return PRINT;
 <INITIAL>"input"                    return INPUT;
 <INITIAL>"class"                    return CLASS;
 

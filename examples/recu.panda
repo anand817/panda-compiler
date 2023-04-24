@@ -1,0 +1,8 @@
+int factorial(int n){
+    whether(n==0 || n==1){
+        returnBack 1;
+    }
+    returnBack n*factorial(n-1);
+}
+
+display(factorial(10));

@@ -235,6 +235,10 @@ void BinaryExpressionNode::run()
     overload equal_overload{
         [this](int &a, int &b)
         { valueNode.assignValue((a == b)); },
+        [this](int &a, float &b)
+        { valueNode.assignValue((a == b)); },
+        [this](float &a, int &b)
+        { valueNode.assignValue((a == b)); },
         [this](float &a, float &b)
         { valueNode.assignValue((a == b)); },
         [this](bool &a, bool &b)

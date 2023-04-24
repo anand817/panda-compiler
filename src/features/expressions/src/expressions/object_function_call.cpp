@@ -88,7 +88,7 @@ void ObjectFunctionCallNode::run()
         ContextHandler::addSymbol(parameterPair.first, parameterPair.second, objectInfo->parameters[parameterPair.first]);
     }
 
-    functionInfo.functionNode->run(SCOPE_TYPE::BLOCK_SCOPE);
+    functionInfo.functionNode->run(SCOPE_TYPE::FUNCTION_SCOPE);
 
     objectType value(*objectInfo.get());
 
