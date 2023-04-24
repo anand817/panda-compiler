@@ -2,7 +2,7 @@ class User{
     int balance;
     string name;
     void getUserInfo(){
-        print(name,"has balance: ",balance);
+        print(name+" has balance: ",balance);
     }
 
     void deposit(int amount){
